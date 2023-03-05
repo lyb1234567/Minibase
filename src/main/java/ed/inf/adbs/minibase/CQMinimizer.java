@@ -118,6 +118,46 @@ public class CQMinimizer {
         }
         return true;
     }
+    public static HashMap<String,List<Term>> merge_homo(List<HashMap<Term,Term>> homo)
+    {
+        HashSet<String> key_set=new HashSet<String>();
+        // a hashset for stroing all of the keys
+        for (int i=0;i<homo.size();i++)
+        {
+            for (Map.Entry<Term, Term> set :
+                    homo.get(i).entrySet())
+            {
+                key_set.add(set.getKey().toString());
+            }
+
+        }
+        Iterator<String> it = key_set.iterator();
+        HashMap<String,List<Term>> merged= new HashMap<String,List<Term>>();
+        while(it.hasNext())
+        {
+            String key=it.next();
+            List<Term> term_lst=new ArrayList<>();
+            for(int i=0;i<homo.size();i++)
+            {
+                HashMap<Term,Term> cur_map=homo.get(i);
+                for (Map.Entry<Term, Term> set :
+                        cur_map.entrySet())
+                {
+                    String cur_key=set.getKey().toString();
+                    if (cur_key.equals(key))
+                    {
+                       term_lst.add(set.getValue());
+                    }
+                }
+            }
+            merged.put(key,term_lst);
+        }
+        System.out.println("Merged Homomorphism:"+merged);
+        return merged;
+    }
+
+
+
 
     /**
      * CQ minimization procedure
@@ -140,10 +180,6 @@ public class CQMinimizer {
             List<Integer> cancelled =new ArrayList<>();
             List<Integer>removed = new ArrayList<>();
             List<HashMap<Term,Term>>  homomorphism = new ArrayList<>();
-            HashMap <Integer,List<Term>> removed_map = new HashMap<Integer,List<Term>>();
-            HashMap <Integer,List<Term>> change_to_map = new HashMap<Integer,List<Term>>();
-            HashMap <Integer,HashMap<Integer,List<Term>>> Extra_change_to_map= new HashMap <Integer,HashMap<Integer,List<Term>>>();
-            HashMap <Integer,HashMap<Integer,List<Term>>> Extra_remove_map= new HashMap <Integer,HashMap<Integer,List<Term>>>();
             for (int  i=0;i<body.size();i++)
             {
                if (cancelled.contains(i) || removed.contains(i))
@@ -235,6 +271,7 @@ public class CQMinimizer {
                                            continue;
                                        }
                                        else
+
                                        {
                                            break;
                                        }
@@ -310,19 +347,11 @@ public class CQMinimizer {
                            if (! removed.contains(j))
                            {
                                removed.add(j);
-                               removed_map.put(j,removed_variable);
-                               change_to_map.put(j,change_to);
                                homomorphism.add(new_homo);
                            }
                            else
                            {
                                 repeat_j++;
-                                HashMap<Integer,List<Term>> extra_repeat=new HashMap<Integer,List<Term>>();
-                               HashMap<Integer,List<Term>> extra_change_to=new HashMap<Integer,List<Term>>();
-                                extra_repeat.put(repeat_j,removed_variable);
-                                extra_change_to.put(repeat_j,change_to);
-                               Extra_remove_map.put(j,extra_repeat);
-                               Extra_change_to_map.put(j,extra_change_to);
                                for (int h=0;h<removed_variable.size();h++)
                                {
                                    new_homo.put(removed_variable.get(h),change_to.get(h));
@@ -335,19 +364,11 @@ public class CQMinimizer {
                            if (! removed.contains(i))
                            {
                                removed.add(i);
-                               removed_map.put(i,removed_variable);
-                               change_to_map.put(i,change_to);
                                homomorphism.add(new_homo);
                            }
                            else
                            {
                                repeat_i++;
-                               HashMap<Integer,List<Term>> extra_repeat=new HashMap<Integer,List<Term>>();
-                               HashMap<Integer,List<Term>> extra_change_to=new HashMap<Integer,List<Term>>();
-                               extra_repeat.put(repeat_i,removed_variable);
-                               extra_change_to.put(repeat_i,change_to);
-                               Extra_remove_map.put(i,extra_repeat);
-                               Extra_change_to_map.put(i,extra_change_to);
                                for (int h=0;h<removed_variable.size();h++)
                                {
                                    new_homo.put(removed_variable.get(h),change_to.get(h));
@@ -365,6 +386,7 @@ public class CQMinimizer {
             }
             List<Atom> temp = new ArrayList<>();
             System.out.println("Homorphorism:"+homomorphism);
+            merge_homo(homomorphism);
 //            removed=check_removed(body_new,body,removed_map,change_to_map,removed,Extra_remove_map,Extra_change_to_map);
 //            System.out.println("removed:"+removed);
             for (int i=0;i<body_new.size();i++)
