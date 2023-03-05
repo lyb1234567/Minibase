@@ -108,7 +108,8 @@ public class CQMinimizer {
     }
     public static  List<Integer> minimization(HashMap<String,List<Term>> homomorphism, List<Atom>body, List<Atom>body_copy,Head head )
     {
-        List<String> not_allowed_key = new ArrayList<>();
+        System.out.println("Merged homo:"+homomorphism);
+        List<String> allowed_key = new ArrayList<>();
         for (Map.Entry<String, List<Term>> map : homomorphism.entrySet())
         {
             String remove_term=map.getKey();
@@ -128,20 +129,23 @@ public class CQMinimizer {
                     {
                         Term temp = temp_atom.getTerms().get(index);
                         temp_atom.getTerms().set(index,set_value);
-                        if(Is_subset(temp_atom,body_copy,head))
+                        List<Atom> newbody=new ArrayList<>();
+                        newbody = Set_body(body,remove_term,set_value);
+                        boolean is_subset= Is_subset(temp_atom,body_copy,head);
+                        boolean is_subset_all = Is_subset(newbody,body_copy,head);
+                        if(is_subset && is_subset_all)
                         {
                            allowed.add(set_value);
+                           allowed_key.add(remove_term);
                         }
                         else
                         {
                            temp_atom.getTerms().set(index,temp);
-                           not_allowed_key.add(remove_term);
                            continue;
                         }
                     }
                     else
                     {
-                        not_allowed_key.add(remove_term);
                         continue;
                     }
                 }
@@ -149,9 +153,17 @@ public class CQMinimizer {
            }
            homomorphism.put(remove_term,allowed);
         }
-        System.out.println(homomorphism);
-        List<Integer> removed = new ArrayList<>();
+        HashMap<String,List<Term>> after_removed_homo=new HashMap<String,List<Term>>();
         for(Map.Entry<String,List<Term>> map: homomorphism.entrySet())
+        {
+            String key= map.getKey();
+            if (allowed_key.contains(key))
+            {
+                after_removed_homo.put(key,homomorphism.get(key));
+            }
+        }
+        List<Integer> removed = new ArrayList<>();
+        for(Map.Entry<String,List<Term>> map: after_removed_homo.entrySet())
         {
               String remove_term=map.getKey();
               for(int i=0;i<body_copy.size();i++)
@@ -173,6 +185,35 @@ public class CQMinimizer {
        boolean is_same=Is_same(target_atom,body_copy,head);
        boolean is_similar=Is_similar(target_atom,body_copy,head);
        return is_same || is_similar;
+    }
+
+    public static boolean Is_subset( List<Atom> body,List<Atom>body_copy,Head head)
+    {
+        for(int i=0;i<body.size();i++)
+        {
+            RelationalAtom body_atom =(RelationalAtom) body.get(i);
+            if (! Is_subset(body_atom,body_copy,head))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static List<Atom> Set_body(List<Atom> body, String target, Term set_value)
+    {
+        for (int i =0; i<body.size();i++)
+        {
+            RelationalAtom cur_atom = (RelationalAtom) body.get(i);
+            List<String> check_contain_term = Is_contain_term(target,cur_atom);
+            if(check_contain_term.get(0).equals("true"))
+            {
+                int index=Integer.parseInt(check_contain_term.get(1));
+                ((RelationalAtom) body.get(i)).getTerms().set(index,set_value);
+            }
+        }
+        List<Atom> new_body= new ArrayList<>();
+        new_body=body;
+        return new_body;
     }
 
     public static  boolean Is_same( RelationalAtom target_atom ,List<Atom>body_copy, Head head)
@@ -250,17 +291,43 @@ public class CQMinimizer {
                     {
                        term_lst.add(set.getValue());
                     }
+
                 }
             }
+            term_lst=remove_duplicate(term_lst);
             merged.put(key,term_lst);
         }
-        System.out.println("Merged Homomorphism:"+merged);
         return merged;
     }
 
 
 
-
+    public static List<Term> remove_duplicate(List<Term>lst)
+    {
+         List<String> temp =new ArrayList<>();
+         List<Integer> removed_index=new ArrayList<>();
+         for(int i=0;i<lst.size();i++)
+         {
+             if (!temp.contains(lst.get(i).toString()))
+             {
+                 temp.add(lst.get(i).toString());
+             }
+             else
+             {
+                 removed_index.add(i);
+             }
+         }
+         List<Term> new_lst=new ArrayList<>();
+         for(int i =0;i<lst.size();i++)
+         {
+             if (!removed_index.contains(i))
+             {
+                 Term new_term= lst.get(i);
+                 new_lst.add(new_term);
+             }
+         }
+         return new_lst;
+    }
     /**
      * CQ minimization procedure
      *
@@ -276,18 +343,11 @@ public class CQMinimizer {
             Query query = QueryParser.parse(Paths.get(inputFile));
             Query query_new = QueryParser.parse(Paths.get(inputFile));
             Head head = query.getHead();
-            List<Variable> variables=head.getVariables();
             List<Atom> body = query.getBody();
             List<Atom> body_new=query_new.getBody();
-            List<Integer> cancelled =new ArrayList<>();
-            List<Integer>removed = new ArrayList<>();
             List<HashMap<Term,Term>>  homomorphism = new ArrayList<>();
             for (int  i=0;i<body.size();i++)
             {
-               if (cancelled.contains(i) || removed.contains(i))
-               {
-                   continue;
-               }
                RelationalAtom current_atom = (RelationalAtom) body.get(i);
                String cur_name = current_atom.getName();
                List <Term> cur_terms = current_atom.getTerms();
@@ -295,190 +355,77 @@ public class CQMinimizer {
                for (int j=i+1;j<body.size();j++)
                {
                    int repeat_j=0;
-                   List<String> minimized=new ArrayList<>();
                    RelationalAtom temp_atom = (RelationalAtom) body.get(j);
                    String temp_name = temp_atom.getName();
                    List<Term> temp_term =temp_atom.getTerms();
-                   List<Term> removed_variable=new ArrayList<>();
-                   List<Term> change_to =new ArrayList<>();
                    int cnt_check=0;
                    HashMap<Term,Term> new_homo= new HashMap<Term,Term>();
                    if (cur_name.equals(temp_name))
                    {
-
                        if (cur_terms.size() == temp_term.size())
                        {
                            for (int k=0;k<cur_terms.size();k++)
                            {
-                               if (cur_terms.get(k).toString().equals(temp_term.get(k).toString()))
+                               Term cur=cur_terms.get(k);
+                               Term temp = temp_term.get(k);
+                               boolean is_cur_constant = cur_terms.get(k) instanceof  Constant;
+                               boolean is_temp_constant = temp_term.get(k) instanceof  Constant;
+                               boolean is_cur_variable= cur_terms.get(k) instanceof Variable;
+                               boolean is_temp_variable= temp_term.get(k) instanceof  Variable;
+                               boolean is_cur_distinguish=is_distinguished(cur_terms.get(k).toString(),head);
+                               boolean is_temp_distinguish=is_distinguished(temp_term.get(k).toString(),head);
+                               if (is_cur_constant && is_temp_constant)
                                {
-                                   minimized.add(cur_terms.get(k).toString());
-                                   cnt_check=cnt_check+1;
-                                   continue;
+                                   if(cur.toString().equals(temp.toString()))
+                                   {
+                                       cnt_check=cnt_check+1;
+                                   }
+
                                }
-                               else
+                               else if (is_cur_constant && is_temp_variable && !is_temp_distinguish)
                                {
-                                   boolean is_cur_numeric = cur_terms.get(k) instanceof  IntegerConstant;
-                                   boolean is_temp_numeric = temp_term.get(k) instanceof  IntegerConstant;
-                                   boolean is_cur_StringConstants = cur_terms.get(k) instanceof StringConstant;
-                                   boolean is_temp_StringConstants = temp_term.get(k) instanceof  StringConstant;
-                                   boolean is_cur_variable= cur_terms.get(k) instanceof Variable;
-                                   boolean is_temp_variable= temp_term.get(k) instanceof  Variable;
-                                   boolean is_cur_distinguish=is_distinguished(cur_terms.get(k).toString(),head);
-                                   boolean is_temp_distinguish=is_distinguished(temp_term.get(k).toString(),head);
-                                   if ( is_cur_numeric && is_temp_variable && ! is_temp_distinguish)
-                                   {
-                                       minimized.add(cur_terms.get(k).toString());
-                                       removed_variable.add(temp_term.get(k));
-                                       change_to.add(cur_terms.get(k));
-                                       new_homo.put(temp_term.get(k),cur_terms.get(k));
-                                       cnt_check=cnt_check+1;
-                                       continue;
-                                   }
-                                   else if (is_temp_numeric && is_cur_variable && ! is_cur_distinguish)
-                                   {
-                                       minimized.add(temp_term.get(k).toString());
-                                       removed_variable.add(cur_terms.get(k));
-                                       change_to.add(temp_term.get(k));
-                                       new_homo.put(cur_terms.get(k),temp_term.get(k));
-                                       cnt_check=cnt_check+1;
-                                       continue;
-                                   }
-                                   else if (is_cur_numeric && is_temp_numeric)
-                                   {
-                                       if (cur_terms.get(k).toString().equals(temp_term.get(k).toString()))
-                                       {
-                                           minimized.add(temp_term.get(k).toString());
-                                           removed_variable.add(cur_terms.get(k));
-                                           change_to.add(cur_terms.get(k));
-                                           new_homo.put(cur_terms.get(k),temp_term.get(k));
-                                           cnt_check=cnt_check+1;
-                                           continue;
-                                       }
-                                       else
-                                       {
-                                           break;
-                                       }
-                                   }
+                                   cnt_check++;
+                                   new_homo.put(temp,cur);
+                               }
+                               else if (is_cur_variable && is_temp_constant && !is_cur_distinguish)
+                               {
+                                   cnt_check++;
+                                   new_homo.put(cur,temp);
+                               }
+                               else if (is_cur_variable && is_temp_variable)
+                               {
+                                    if(!is_cur_distinguish && !is_temp_distinguish)
+                                    {
+                                        if(! cur.toString().equals(temp.toString()))
+                                        {
+                                            new_homo.put(cur,temp);
+                                            new_homo.put(temp,cur);
+                                            cnt_check++;
+                                        }
+                                        else
+                                        {
+                                           cnt_check++;
+                                        }
+                                    }
+                                    else if ( is_cur_distinguish && ! is_temp_distinguish)
+                                    {
+                                         new_homo.put(temp,cur);
+                                         cnt_check++;
 
-                                   else if (is_cur_StringConstants && is_temp_StringConstants)
-                                   {
-                                       if (cur_terms.get(k).toString().equals(temp_term.get(k).toString()))
-                                       {
-                                           minimized.add(temp_term.get(k).toString());
-                                           removed_variable.add(cur_terms.get(k));
-                                           change_to.add(temp_term.get(k));
-                                           new_homo.put(cur_terms.get(k),temp_term.get(k));
-                                           cnt_check=cnt_check+1;
-                                           continue;
-                                       }
-                                       else
-
-                                       {
-                                           break;
-                                       }
-                                   }
-                                   else if (is_cur_StringConstants && is_temp_variable && ! is_temp_distinguish)
-                                   {
-
-                                       minimized.add(cur_terms.get(k).toString());
-                                       removed_variable.add(temp_term.get(k));
-                                       change_to.add(cur_terms.get(k));
-                                       new_homo.put(temp_term.get(k),cur_terms.get(k));
-                                       cnt_check=cnt_check+1;
-                                       continue;
-                                   }
-                                   else if (is_temp_StringConstants && is_cur_variable && ! is_cur_distinguish)
-                                   {
-                                       minimized.add(temp_term.get(k).toString());
-                                       removed_variable.add(cur_terms.get(k));
-                                       change_to.add(temp_term.get(k));
-                                       new_homo.put(cur_terms.get(k),temp_term.get(k));
-                                       cnt_check=cnt_check+1;
-                                       continue;
-                                   }
-
-                                   else if(is_temp_variable && is_temp_distinguish)
-                                   {
-                                       if (cur_terms.get(k).toString().equals(temp_term.get(k).toString()))
-                                       {
-                                           minimized.add(temp_term.get(k).toString());
-                                           removed_variable.add(cur_terms.get(k));
-                                           change_to.add(temp_term.get(k));
-                                           new_homo.put(cur_terms.get(k),temp_term.get(k));
-                                           cnt_check=cnt_check+1;
-                                           continue;
-                                       }
-                                   }
-                                   else if(is_cur_variable && is_cur_distinguish)
-                                   {
-                                       if (temp_term.get(k).toString().equals(cur_terms.get(k).toString()))
-                                       {
-                                           minimized.add(temp_term.get(k).toString());
-                                           removed_variable.add(cur_terms.get(k));
-                                           change_to.add(temp_term.get(k));
-                                           new_homo.put(cur_terms.get(k),temp_term.get(k));
-                                           cnt_check=cnt_check+1;
-                                           continue;
-                                       }
-                                   }
-                                   else if ( is_temp_variable && is_cur_variable && ! (is_temp_distinguish) && !(is_cur_distinguish) )
-                                   {
-                                       minimized.add(temp_term.get(k).toString());
-                                       removed_variable.add(cur_terms.get(k));
-                                       change_to.add((temp_term.get(k)));
-                                       new_homo.put(cur_terms.get(k),temp_term.get(k));
-                                       cnt_check=cnt_check+1;
-                                       continue;
-                                   }
-
+                                    }
+                                    else if (is_temp_distinguish && ! is_cur_distinguish)
+                                    {
+                                         new_homo.put(cur,temp);
+                                         cnt_check++;
+                                    }
                                }
                            }
+                           homomorphism.add(new_homo);
                        }
                        else
                        {
                          continue;
                        }
-                   }
-                   if (cnt_check==cur_terms.size())
-                   {
-                       cancelled.add(i);
-                       cancelled.add(j);
-                       if(if_equal(minimized,cur_terms))
-                       {
-                           if (! removed.contains(j))
-                           {
-                               removed.add(j);
-                               homomorphism.add(new_homo);
-                           }
-                           else
-                           {
-                                repeat_j++;
-                               for (int h=0;h<removed_variable.size();h++)
-                               {
-                                   new_homo.put(removed_variable.get(h),change_to.get(h));
-                               }
-                               homomorphism.add(new_homo);
-                           }
-                       }
-                       else if (if_equal(minimized,temp_term))
-                       {
-                           if (! removed.contains(i))
-                           {
-                               removed.add(i);
-                               homomorphism.add(new_homo);
-                           }
-                           else
-                           {
-                               repeat_i++;
-                               for (int h=0;h<removed_variable.size();h++)
-                               {
-                                   new_homo.put(removed_variable.get(h),change_to.get(h));
-                               }
-                               homomorphism.add(new_homo);
-                           }
-                       }
-                       break;
                    }
                    else
                    {
@@ -488,7 +435,9 @@ public class CQMinimizer {
             }
             List<Atom> temp = new ArrayList<>();
             HashMap<String,List<Term>> merged_homo= merge_homo(homomorphism);
+            List<Integer> removed =new ArrayList<>();
             removed=minimization(merged_homo,body,body_new,head);
+            System.out.println("New_body:"+body_new);
             for (int i=0;i<body_new.size();i++)
         {
             if (!removed.contains(i))
