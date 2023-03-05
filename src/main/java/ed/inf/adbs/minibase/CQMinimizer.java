@@ -65,29 +65,17 @@ public class CQMinimizer {
         return_val.add("12312123123");
         return return_val;
     }
-    public  static  boolean is_distinguished(List<Atom> body, List<Variable> variables, String check_value)
+    public  static  boolean is_distinguished(String check_value, Head head)
     {
-        int cnt=0;
-        List <String > check = new ArrayList<>();
-        for (int i=0;i<variables.size();i++)
-        {
-            check.add(variables.get(i).toString());
-        }
-        if (check.contains(check_value))
-        {
-            for (int i=0;i<body.size();i++)
-            {
-                RelationalAtom atom =(RelationalAtom) body.get(i);
-                for(int j=0;j<atom.getTerms().size();j++)
-                {
-                    if (atom.getTerms().get(j).toString().equals(check_value))
-                    {
-                        cnt=cnt+1;
-                    }
-                }
-            }
-        }
-        return cnt==1;
+         List<Variable> temp = head.getVariables();
+         for(int i=0;i<temp.size();i++)
+         {
+             if (temp.get(i).toString().equals(check_value))
+             {
+                 return true;
+             }
+         }
+         return false;
     }
     public static String Minimized(Head head, List<Atom> body)
     {
@@ -118,6 +106,120 @@ public class CQMinimizer {
         }
         return true;
     }
+    public static  List<Integer> minimization(HashMap<String,List<Term>> homomorphism, List<Atom>body, List<Atom>body_copy,Head head )
+    {
+        List<String> not_allowed_key = new ArrayList<>();
+        for (Map.Entry<String, List<Term>> map : homomorphism.entrySet())
+        {
+            String remove_term=map.getKey();
+            List<Term> term_lst=map.getValue();
+            List<Term> allowed=new ArrayList<>();
+           for(int j=0;j<term_lst.size();j++)
+           {
+            Term set_value=term_lst.get(j);
+            for(int i=0;i<body.size();i++)
+            {
+                RelationalAtom temp_atom=(RelationalAtom)body.get(i);
+                if(Is_contain_term(remove_term,temp_atom).get(0).equals("true"))
+                {
+                    int index = Integer.parseInt(Is_contain_term(remove_term,temp_atom).get(1));
+                    // replace the value with set value
+                    if (!is_distinguished(remove_term,head))
+                    {
+                        Term temp = temp_atom.getTerms().get(index);
+                        temp_atom.getTerms().set(index,set_value);
+                        if(Is_subset(temp_atom,body_copy,head))
+                        {
+                           allowed.add(set_value);
+                        }
+                        else
+                        {
+                           temp_atom.getTerms().set(index,temp);
+                           not_allowed_key.add(remove_term);
+                           continue;
+                        }
+                    }
+                    else
+                    {
+                        not_allowed_key.add(remove_term);
+                        continue;
+                    }
+                }
+            }
+           }
+           homomorphism.put(remove_term,allowed);
+        }
+        System.out.println(homomorphism);
+        List<Integer> removed = new ArrayList<>();
+        for(Map.Entry<String,List<Term>> map: homomorphism.entrySet())
+        {
+              String remove_term=map.getKey();
+              for(int i=0;i<body_copy.size();i++)
+              {
+                  RelationalAtom atom=(RelationalAtom) body_copy.get(i);
+                  List<String> contain=Is_contain_term(remove_term,atom);
+                  if (contain.get(0).toString().equals("true") && map.getValue().size()>0)
+                  {
+                      removed.add(i);
+                  }
+
+              }
+        }
+        System.out.println("Removed:"+removed);
+        return removed;
+    }
+    public static boolean Is_subset( RelationalAtom target_atom ,List<Atom>body_copy,Head head)
+    {
+       boolean is_same=Is_same(target_atom,body_copy,head);
+       boolean is_similar=Is_similar(target_atom,body_copy,head);
+       return is_same || is_similar;
+    }
+
+    public static  boolean Is_same( RelationalAtom target_atom ,List<Atom>body_copy, Head head)
+    {
+
+        for (int i=0;i<body_copy.size();i++)
+        {
+            RelationalAtom body_relation_atom=(RelationalAtom) body_copy.get(i);
+            if (body_relation_atom.equals(target_atom))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public  static  boolean Is_similar(RelationalAtom target_atom,List<Atom> body_copy,Head head)
+    {
+        RelationalAtom atom = (RelationalAtom) body_copy.get(0);
+        for(int i=0;i<body_copy.size();i++)
+        {
+            RelationalAtom body_relation_atom =(RelationalAtom) body_copy.get(i);
+            if (body_relation_atom.Is_similar(target_atom,head))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static List<String> Is_contain_term(String term , RelationalAtom relationalAtom)
+    {
+        for(int i=0;i<relationalAtom.getTerms().size();i++)
+        {
+            if (relationalAtom.getTerms().get(i).toString().equals(term))
+            {
+                List<String> check=new ArrayList<>();
+                check.add("true");
+                check.add(Integer.toString(i));
+                return check;
+            }
+        }
+
+        List<String> check=new ArrayList<>();
+        check.add("false");
+        check.add(Integer.toString(Integer.MAX_VALUE));
+        return check;
+    }
+
     public static HashMap<String,List<Term>> merge_homo(List<HashMap<Term,Term>> homo)
     {
         HashSet<String> key_set=new HashSet<String>();
@@ -222,8 +324,8 @@ public class CQMinimizer {
                                    boolean is_temp_StringConstants = temp_term.get(k) instanceof  StringConstant;
                                    boolean is_cur_variable= cur_terms.get(k) instanceof Variable;
                                    boolean is_temp_variable= temp_term.get(k) instanceof  Variable;
-                                   boolean is_cur_distinguish=is_distinguished(body,variables,cur_terms.get(k).toString());
-                                   boolean is_temp_distinguish=is_distinguished(body,variables,temp_term.get(k).toString());
+                                   boolean is_cur_distinguish=is_distinguished(cur_terms.get(k).toString(),head);
+                                   boolean is_temp_distinguish=is_distinguished(temp_term.get(k).toString(),head);
                                    if ( is_cur_numeric && is_temp_variable && ! is_temp_distinguish)
                                    {
                                        minimized.add(cur_terms.get(k).toString());
@@ -385,10 +487,8 @@ public class CQMinimizer {
                }
             }
             List<Atom> temp = new ArrayList<>();
-            System.out.println("Homorphorism:"+homomorphism);
-            merge_homo(homomorphism);
-//            removed=check_removed(body_new,body,removed_map,change_to_map,removed,Extra_remove_map,Extra_change_to_map);
-//            System.out.println("removed:"+removed);
+            HashMap<String,List<Term>> merged_homo= merge_homo(homomorphism);
+            removed=minimization(merged_homo,body,body_new,head);
             for (int i=0;i<body_new.size();i++)
         {
             if (!removed.contains(i))
