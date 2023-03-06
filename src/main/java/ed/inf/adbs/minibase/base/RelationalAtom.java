@@ -112,7 +112,6 @@ public class RelationalAtom extends Atom {
 
 //        if(obj==null || !(obj instanceof RelationalAtom))
 //            return false;
-        boolean is_term_equal=true;
         List<Term>  check = ((RelationalAtom) obj).getTerms();
         if( ((RelationalAtom) obj).getTerms().size()!= this.terms.size())
         {

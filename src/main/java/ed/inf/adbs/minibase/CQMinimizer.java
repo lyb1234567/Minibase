@@ -56,6 +56,7 @@ public class CQMinimizer {
          }
          return false;
     }
+
     public static String Minimized(Head head, List<Atom> body)
     {
 
@@ -67,28 +68,13 @@ public class CQMinimizer {
                 result = result + body.get(i);
                 continue;
             }
-           else
+            else
             {
                 result=result + ", " + body.get(i);
             }
         }
         return result;
     }
-    public static  void minimization(HashMap<String,List<Term>> homomorphism, List<Atom>body, List<Atom>body_copy,Head head )
-    {
-        System.out.println("Merged_homo:"+homomorphism);
-        List<Integer> removed_lst_final=new ArrayList<>();
-        // 遍历homomorphorism消除
-        for( Atom atom : body)
-        {
-            RelationalAtom cur_atom=(RelationalAtom) atom;
-            List<Term>cur_terms=cur_atom.getTerms();
-            int cur_index=body.indexOf(cur_atom);
-            System.out.println("Cur index:"+cur_index);
-        }
-
-    }
-
     public static List<Atom> deepCopy_body(List<Atom>body_copy)
     {
         List <Atom> new_lst=new ArrayList<>();
@@ -99,30 +85,7 @@ public class CQMinimizer {
         }
         return new_lst;
     }
-    public static List<String> Is_find_removed(List <Term> term_lst,HashMap<String,List<Term>> homomorphism)
-    {
-        List<String> result=null;
-        for (Term term: term_lst)
-        {
-            for (Map.Entry<String, List<Term>> map : homomorphism.entrySet())
-            {
 
-                String key = map.getKey();
-                if (key.equals(term.toString()))
-                {
-                    result.add(key);
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-    public static boolean Is_subset( RelationalAtom target_atom ,List<Atom>body_copy,Head head)
-    {
-       boolean is_same=Is_same(target_atom,body_copy,head);
-       boolean is_similar=Is_similar(target_atom,body_copy,head);
-       return is_same || is_similar;
-    }
 
     public static boolean Is_subset( List<Atom> body,List<Atom>body_copy,Head head)
     {
@@ -153,19 +116,7 @@ public class CQMinimizer {
         return new_body;
     }
 
-    public static  boolean Is_same( RelationalAtom target_atom ,List<Atom>body_copy, Head head)
-    {
 
-        for (int i=0;i<body_copy.size();i++)
-        {
-            RelationalAtom body_relation_atom=(RelationalAtom) body_copy.get(i);
-            if (body_relation_atom.equals(target_atom))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
     public  static  boolean Is_similar(RelationalAtom target_atom,List<Atom> body_copy,Head head)
     {
         for(int i=0;i<body_copy.size();i++)
@@ -236,7 +187,63 @@ public class CQMinimizer {
         return merged;
     }
 
+    // Method for checking if there is a homorphism between two relationalAtoms: only for one direction=> atom1 -> atom2
+    public static HashMap<Term,Term> check_homomorphism(RelationalAtom atom1,RelationalAtom atom2,Head head)
+    {
+        List<Term> term_lst_1=atom1.getTerms();
+        List<Term> term_lst_2=atom2.getTerms();
 
+        // If they do not have the same name or the same size of term list, retun null;
+        String name1=atom1.getName();
+        String name2=atom2.getName();
+        // retun a hash map as a homorphism
+        HashMap<Term,Term> result=new HashMap<Term,Term>();
+        if(!name1.equals(name2))
+        {
+            return null;
+        }
+        if(term_lst_1.size()!=term_lst_2.size())
+        {
+            return null;
+        }
+        else
+        {
+            for(int i=0;i<term_lst_1.size();i++)
+            {
+                Term term1=term_lst_1.get(i);
+                Term term2=term_lst_2.get(i);
+                boolean Isconstant_1 = term1 instanceof Constant;
+                boolean Isconstant_2 = term2 instanceof Constant;
+                boolean Isvariable_1 = term1 instanceof Variable;
+                boolean Isvariable_2 = term2 instanceof Variable;
+                boolean IsDistinguished_1= is_distinguished(term1.toString(),head);
+                boolean IsDistinguished_2= is_distinguished(term2.toString(),head);
+
+
+                //Rule 1: if the two terms are both variables that are not distinguished, we follow the single direction rule: from atom1 -> atom2
+                if ( ! IsDistinguished_1 && !IsDistinguished_2 && Isvariable_1 && Isvariable_2)
+                {
+                    if (!term1.toString().equals(term2.toString()))
+                    {
+                        result.put(term1,term2);
+                    }
+                }
+                // Rule 2 : If one of the terms is constant and the other one is a variable that is not distinguished
+                else if (!IsDistinguished_1 && Isvariable_1 && Isconstant_2)
+                {
+                    result.put(term1,term2);
+                }
+
+                // Rule 3: If one of the terms is not distinguished variabele and another one is
+                else if(!IsDistinguished_1 && Isvariable_1 && IsDistinguished_2)
+                {
+                    result.put(term1,term2);
+                }
+
+            }
+            return result;
+        }
+    }
 
     public static List<Term> remove_duplicate(List<Term>lst)
     {
@@ -264,6 +271,49 @@ public class CQMinimizer {
          }
          return new_lst;
     }
+
+    public static List<Atom> Remove_repeat(List<Atom>target)
+    {
+        List<Atom> lst=new ArrayList<>();
+        for(int i=0;i<target.size();i++)
+        {
+            RelationalAtom atom = (RelationalAtom) target.get(i);
+            boolean find=false;
+            if (lst.size()==0)
+            {
+                lst.add(atom);
+                continue;
+            }
+            for(int j=0;j<lst.size();j++)
+            {
+                RelationalAtom check_atom = (RelationalAtom) lst.get(j);
+                if(check_atom.equals(atom))
+                {
+                    find=true;
+                }
+            }
+            if(!find)
+            {
+                lst.add(atom);
+            }
+        }
+        return lst;
+    }
+
+    // this method will be used to generate the subList of Atoms, which contains all the atoms apart from an atom of specific list
+    public static List<Atom> Sub_body_lst(int index,List<Atom>body)
+    {
+        List<Atom> temp =new ArrayList<>();
+        List<Atom> deepcopy = deepCopy_body(body);
+        for (int i=0;i<deepcopy.size();i++)
+        {
+            if (i!=index)
+            {
+                temp.add(deepcopy.get(i));
+            }
+        }
+        return temp;
+    }
     /**
      * CQ minimization procedure
      *
@@ -281,114 +331,82 @@ public class CQMinimizer {
             Head head = query.getHead();
             List<Atom> body = query.getBody();
             List<Atom> body_new=query_new.getBody();
-            // Initialize a hash map for stroing homorphism
             List<HashMap<Term,Term>>  homomorphism = new ArrayList<>();
+            // Scan the body,and check if the current atom has homomorphism with the other atoms.
             for (int  i=0;i<body.size();i++)
             {
-               RelationalAtom current_atom = (RelationalAtom) body.get(i);
-               String cur_name = current_atom.getName();
-               List <Term> cur_terms = current_atom.getTerms();
-                int repeat_i=0;
-               for (int j=i+1;j<body.size();j++)
-               {
-                   int repeat_j=0;
-                   RelationalAtom temp_atom = (RelationalAtom) body.get(j);
-                   String temp_name = temp_atom.getName();
-                   List<Term> temp_term =temp_atom.getTerms();
-                   int cnt_check=0;
-                   HashMap<Term,Term> new_homo= new HashMap<Term,Term>();
-                   if (cur_name.equals(temp_name))
-                   {
-                       if (cur_terms.size() == temp_term.size())
-                       {
-                           for (int k=0;k<cur_terms.size();k++)
-                           {
-                               Term cur=cur_terms.get(k);
-                               Term temp = temp_term.get(k);
-                               boolean is_cur_constant = cur_terms.get(k) instanceof  Constant;
-                               boolean is_temp_constant = temp_term.get(k) instanceof  Constant;
-                               boolean is_cur_variable= cur_terms.get(k) instanceof Variable;
-                               boolean is_temp_variable= temp_term.get(k) instanceof  Variable;
-                               boolean is_cur_distinguish=is_distinguished(cur_terms.get(k).toString(),head);
-                               boolean is_temp_distinguish=is_distinguished(temp_term.get(k).toString(),head);
-                               if (is_cur_constant && is_temp_constant)
-                               {
-                                   if(cur.toString().equals(temp.toString()))
-                                   {
-                                       cnt_check=cnt_check+1;
-                                   }
+                // We will check if the current atom has the single direction homomorphism with the other atoms in the subbody
+                RelationalAtom cur_atom =(RelationalAtom) body.get(i);
+                List<Atom> sub_body =Sub_body_lst(i,body);
+//                System.out.println("Current atom:"+cur_atom);
+//                System.out.println("Sub body:"+sub_body);
+                List<HashMap<Term,Term>> homo_lst =new ArrayList<>();
+                for( Atom sub_atom : sub_body)
+                {
+                    HashMap<Term,Term> homo = new HashMap<Term,Term>();
+                    homo=check_homomorphism(cur_atom,(RelationalAtom) sub_atom ,head);
+                    if(homo!=null)
+                    {
+                        if(!homo.isEmpty())
+                        {homo_lst.add(homo);}
+                    }
+                }
+//                System.out.println("Homomorphism list:"+homo_lst);
+                // Now, since we have single direction rule, we need to apply them to the whole body, we will have a temp body to change
+                // If the temp body is still the subset of the original body, then it means the homorphism works.
+                // 1. check if the homomorphism list is empty, if so, just continue; 2. else, iterate through the list, apply every homorphism and check if it works
+                // Since we only care about one homorphism, so if the current homorphism works, just break
 
-                               }
-                               else if (is_cur_constant && is_temp_variable && !is_temp_distinguish)
-                               {
-                                   cnt_check++;
-                                   new_homo.put(temp,cur);
-                               }
-                               else if (is_cur_variable && is_temp_constant && !is_cur_distinguish)
-                               {
-                                   cnt_check++;
-                                   new_homo.put(cur,temp);
-                               }
-                               else if (is_cur_variable && is_temp_variable)
-                               {
-                                    if(!is_cur_distinguish && !is_temp_distinguish)
-                                    {
-                                        if(! cur.toString().equals(temp.toString()))
-                                        {
-                                            new_homo.put(cur,temp);
-                                            new_homo.put(temp,cur);
-                                            cnt_check++;
-                                        }
-                                        else
-                                        {
-                                           cnt_check++;
-                                        }
-                                    }
-                                    else if ( is_cur_distinguish && ! is_temp_distinguish)
-                                    {
-                                         new_homo.put(temp,cur);
-                                         cnt_check++;
+                // Deep copy the body for changing terms
+                List<Atom> temp_body=deepCopy_body(body);
+                for(HashMap<Term,Term> map : homo_lst)
+                {
+                    // iterate through the current hashmap,
+                    List<Term> map_from_lst =new ArrayList<>();
+                    List<Term> map_to_lst =new ArrayList<>();
+                    for (Map.Entry<Term,Term> homo: map.entrySet())
+                    {
+                        map_from_lst.add(homo.getKey());
+                        map_to_lst.add(homo.getValue());
+                    }
+//                    System.out.println("Mapping from list:"+map_from);
+//                    System.out.println("Mapping to list:"+map_to);
+                    // Now we should have a list for storing maping from element and a list for maping to element
 
-                                    }
-                                    else if (is_temp_distinguish && ! is_cur_distinguish)
-                                    {
-                                         new_homo.put(cur,temp);
-                                         cnt_check++;
-                                    }
-                               }
-                           }
-                           homomorphism.add(new_homo);
-                       }
-                       else
-                       {
-                         continue;
-                       }
-                   }
-                   else
-                   {
-                     continue;
-                   }
-               }
+                    // Now iterate through each map_form list and map_to list, User Set_value method to apply homomorphism
+                    for(int key=0; key<map_from_lst.size();key++)
+                    {
+                        Term map_from=map_from_lst.get(key);
+                        Term map_to =map_to_lst.get(key);
+                        Set_body(temp_body,map_from.toString(),map_to);
+                    }
+                    // Now check if the temp_body is a subset of the original body, which means we need make sure each relational atom is the same as that in
+                    // the original body
+                    boolean check_subset = Is_subset(temp_body,body_new,head);
+                    if (check_subset)
+                    {
+//                        System.out.println("After Apply homorphism:"+ temp_body);
+                        body=deepCopy_body(temp_body);
+                        break;
+                    }
+                    else
+                    {
+//                        System.out.println("Not work, temp body is :"+ temp_body);
+//                        System.out.println("Not work, currrent body is:"+ body);
+                        temp_body=deepCopy_body(body);
+                    }
+                }
+//                System.out.println("\n");
             }
-            List<Atom> temp = new ArrayList<>();
-            HashMap<String,List<Term>> merged_homo= merge_homo(homomorphism);
-//            List<Integer> removed =new ArrayList<>();
-            minimization(merged_homo,body,body_new,head);
-            System.out.println("New_body:"+body_new);
-//            for (int i=0;i<body_new.size();i++)
-//        {
-//            if (!removed.contains(i))
-//            {
-//                temp.add(body_new.get(i));
-//            }
-//        }
-//            String output= Minimized(head,temp);
-//            System.out.println(output);
+            // remove_repeat
+            body=Remove_repeat(body);
+            String output=Minimized(head,body);
+            System.out.println(output);
+            // print
+            HashMap<Term,Term> map=new HashMap<Term,Term>();
             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile,false));
-//            writer.write(output);
+            writer.write(output);
             writer.close();
-
-
         }catch (IOException e)
         {
             e.printStackTrace();
