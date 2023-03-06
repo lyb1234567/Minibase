@@ -2,6 +2,7 @@ package ed.inf.adbs.minibase.base;
 
 import ed.inf.adbs.minibase.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SumAggregate extends Term {
@@ -19,5 +20,16 @@ public class SumAggregate extends Term {
     @Override
     public String toString() {
         return "SUM(" + Utils.join(productTerms, " * ") + ")";
+    }
+
+    public SumAggregate deepcopy()
+    {
+        List<Term> termList = new ArrayList<>();
+        for(int i=0;i<getProductTerms().size();i++)
+        {
+            Term cur=getProductTerms().get(i).deepcopy();
+            termList.add(cur);
+        }
+        return new SumAggregate(termList);
     }
 }

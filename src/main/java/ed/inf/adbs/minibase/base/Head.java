@@ -2,6 +2,7 @@ package ed.inf.adbs.minibase.base;
 
 import ed.inf.adbs.minibase.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Head {
@@ -38,5 +39,19 @@ public class Head {
             return name + "(" + agg + ")";
         }
         return name + "(" + Utils.join(variables, ", ") + ", " + agg + ")";
+    }
+
+    public Head deepcopy()
+    {
+        SumAggregate new_agg= this.agg.deepcopy();
+        List<Variable> var_lst=new ArrayList<>();
+        for(int i=0;i<this.variables.size();i++)
+        {
+            Variable var = this.variables.get(i).deepcopy();
+            var_lst.add(var);
+        }
+        String copy_name=this.getName();
+        return new Head(copy_name,var_lst,agg);
+
     }
 }

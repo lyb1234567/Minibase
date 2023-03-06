@@ -2,6 +2,7 @@ package ed.inf.adbs.minibase.base;
 
 import ed.inf.adbs.minibase.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,7 +49,6 @@ public class RelationalAtom extends Atom {
     }
     public boolean Is_similar( Object obj,Head head)
     {
-
         if(obj==null || !(obj instanceof RelationalAtom))
             return false;
 
@@ -67,7 +67,7 @@ public class RelationalAtom extends Atom {
         {
             Term body_term=this.getTerms().get(i);
             Term check_term=obj_terms.get(i);
-            if (!is_distinguished(body_term.toString(),head) || ! is_distinguished(check_term.toString(),head))
+            if (is_distinguished(body_term.toString(),head) || is_distinguished(check_term.toString(),head))
             {
                 return false;
             }
@@ -96,6 +96,7 @@ public class RelationalAtom extends Atom {
             }
 
         }
+
         return flag;
     }
 
@@ -109,8 +110,8 @@ public class RelationalAtom extends Atom {
     public boolean equals(Object obj)
     {
 
-        if(obj==null || !(obj instanceof RelationalAtom))
-            return false;
+//        if(obj==null || !(obj instanceof RelationalAtom))
+//            return false;
         boolean is_term_equal=true;
         List<Term>  check = ((RelationalAtom) obj).getTerms();
         if( ((RelationalAtom) obj).getTerms().size()!= this.terms.size())
@@ -131,5 +132,16 @@ public class RelationalAtom extends Atom {
         return (this.name).equals(((RelationalAtom) obj).getName());
     }
 
+    public RelationalAtom deepcopy()
+    {
+        List<Term> termList = new ArrayList<>();
+        for(int i=0;i<this.getTerms().size();i++)
+        {
+            Term new_term= this.getTerms().get(i).deepcopy();
+            termList.add(new_term);
+        }
+        String name=this.getName();
+        return new RelationalAtom(name,termList);
+    }
 
 }

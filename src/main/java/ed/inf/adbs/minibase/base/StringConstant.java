@@ -15,4 +15,24 @@ public class StringConstant extends Constant {
     public String toString() {
         return "'" + value + "'";
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        else
+        {
+            return ((StringConstant) obj).getValue().equals(this.getValue());
+        }
+    }
+
+    public StringConstant deepcopy()
+    {
+        return new StringConstant(this.getValue());
+    }
+
+
 }

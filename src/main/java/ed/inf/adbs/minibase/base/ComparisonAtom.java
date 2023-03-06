@@ -31,4 +31,12 @@ public class ComparisonAtom extends Atom {
         return term1 + " " + op + " " + term2;
     }
 
+    public ComparisonAtom deepcopy()
+    {
+        Term new_1 = this.term1.deepcopy();
+        Term new_2 = this.term2.deepcopy();
+        ComparisonOperator new_op = this.op;
+        return new ComparisonAtom(new_1,new_2,new_op);
+    }
+
 }

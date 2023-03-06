@@ -15,4 +15,23 @@ public class IntegerConstant extends Constant {
     public String toString() {
         return value.toString();
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        // if it does not satisfy the default equals, then return false
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        else
+        {
+            //Then compare the value of the two objects
+            return ((IntegerConstant) obj).getValue().equals(this.getValue());
+        }
+    }
+    public IntegerConstant deepcopy()
+    {
+        return new IntegerConstant(this.getValue());
+    }
 }

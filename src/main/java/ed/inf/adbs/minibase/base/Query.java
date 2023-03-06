@@ -2,6 +2,7 @@ package ed.inf.adbs.minibase.base;
 
 import ed.inf.adbs.minibase.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Query {
@@ -25,5 +26,19 @@ public class Query {
     @Override
     public String toString() {
         return head + " :- " + Utils.join(body, ", ");
+    }
+
+    public Query deepcopy()
+    {
+        Head new_head=this.head.deepcopy();
+        List<Atom> termList=new ArrayList<>();
+        for(int i=0;i<this.body.size();i++)
+        {
+            Atom new_term=this.body.get(i).deepcopy();
+            termList.add(new_term);
+        }
+        Head new_obj= this.head.deepcopy();
+
+        return new Query(new_obj,termList);
     }
 }
