@@ -29,10 +29,21 @@ public class StringConstant extends Constant {
         }
     }
 
+    /**
+     * Override hashcode() for String constant, so that it can be removed in hashset,if there is a duplicate StringConstant Object
+     * @return Hashcode is a Integer
+     */
+    @Override
+    public int hashCode()
+    {
+        return this.getValue().hashCode();
+    }
+
     public StringConstant deepcopy()
     {
         return new StringConstant(this.getValue());
     }
+
 
 
 }

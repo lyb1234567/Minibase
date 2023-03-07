@@ -30,6 +30,17 @@ public class IntegerConstant extends Constant {
             return ((IntegerConstant) obj).getValue().equals(this.getValue());
         }
     }
+
+    /**
+     * Override hashcode for Integer Constant, so that it can be removed if there is a duplicate Integer constant in hashset
+     * @return Hashcode is a integer
+     */
+    @Override public int hashCode()
+    {
+        return this.getValue().hashCode();
+
+    }
+    @Override
     public IntegerConstant deepcopy()
     {
         return new IntegerConstant(this.getValue());

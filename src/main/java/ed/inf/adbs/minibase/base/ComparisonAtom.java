@@ -31,6 +31,12 @@ public class ComparisonAtom extends Atom {
         return term1 + " " + op + " " + term2;
     }
 
+
+    @Override
+    public int hashCode()
+    {
+        return this.term1.hashCode()*this.term2.hashCode()*this.op.hashCode();
+    }
     public ComparisonAtom deepcopy()
     {
         Term new_1 = this.term1.deepcopy();

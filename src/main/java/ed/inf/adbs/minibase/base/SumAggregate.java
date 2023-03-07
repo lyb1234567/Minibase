@@ -22,6 +22,20 @@ public class SumAggregate extends Term {
         return "SUM(" + Utils.join(productTerms, " * ") + ")";
     }
 
+    /**
+     * Override hashcode for SumAggregate so that it can be removed, if there is a duplicate SumAggregate object in the hashset
+     * @return hashCode should be a integer
+     */
+    @Override
+    public int hashCode()
+    {
+        int hashCode=1;
+        for(int i=0;i<productTerms.size();i++)
+        {
+            hashCode=hashCode*productTerms.get(i).hashCode();
+        }
+        return hashCode;
+    }
     public SumAggregate deepcopy()
     {
         List<Term> termList = new ArrayList<>();
@@ -32,4 +46,5 @@ public class SumAggregate extends Term {
         }
         return new SumAggregate(termList);
     }
+
 }

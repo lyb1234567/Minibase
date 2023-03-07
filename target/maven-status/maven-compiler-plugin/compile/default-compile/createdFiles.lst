@@ -18,7 +18,9 @@ ed\inf\adbs\minibase\base\Variable.class
 ed\inf\adbs\minibase\base\Term.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$SumaggContext.class
 ed\inf\adbs\minibase\base\ComparisonOperator.class
+ed\inf\adbs\minibase\dbStructure\Tuple.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$TermContext.class
+ed\inf\adbs\minibase\base\Operator.class
 ed\inf\adbs\minibase\parser\QueryParser$TermVisitor.class
 ed\inf\adbs\minibase\parser\generated\MinibaseListener.class
 ed\inf\adbs\minibase\parser\generated\MinibaseLexer.class

@@ -8,11 +8,13 @@ C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\StringConstant.j
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseBaseVisitor.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\ComparisonOperator.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseListener.java
+C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\dbStructure\Tuple.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\Head.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\RelationalAtom.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseBaseListener.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseParser.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\Constant.java
+C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\Operator.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\Minibase.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\Query.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\IntegerConstant.java

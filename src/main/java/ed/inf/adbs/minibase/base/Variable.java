@@ -25,6 +25,17 @@ public class Variable extends Term {
         return name1.equals(name2);
     }
 
+    /**
+     * Override hashCode for Variable object,so it can be removed from the hashset if there is a duplicate
+     * @return hashCode should be an integer
+     */
+
+    @Override
+    public int hashCode()
+    {
+        return this.getName().hashCode();
+    }
+
     public Variable deepcopy()
     {
         return new Variable(this.name);

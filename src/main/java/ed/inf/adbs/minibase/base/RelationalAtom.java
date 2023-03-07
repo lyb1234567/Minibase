@@ -131,6 +131,16 @@ public class RelationalAtom extends Atom {
         return (this.name).equals(((RelationalAtom) obj).getName());
     }
 
+    /**
+     * Override hashcode for relational atom, so that it can be removed from the hashset(), if there is a duplicate relationalatom object
+     * @return hashCode is an integer
+     */
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.name, this.terms);
+    }
+
     public RelationalAtom deepcopy()
     {
         List<Term> termList = new ArrayList<>();
@@ -142,5 +152,7 @@ public class RelationalAtom extends Atom {
         String name=this.getName();
         return new RelationalAtom(name,termList);
     }
+
+
 
 }

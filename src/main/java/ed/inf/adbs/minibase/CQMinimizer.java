@@ -409,6 +409,10 @@ public class CQMinimizer {
             Head head = query.getHead();
             List<Atom> body = query.getBody();
             List<Atom> body_new=query_new.getBody();
+            RelationalAtom R1= (RelationalAtom) body.get(0);
+            RelationalAtom R2 = (RelationalAtom) body.get(1);
+            List<Term> term1= R1.getTerms();
+            List<Term> term2=R2.getTerms();
             // Use the Minimization helper to minimize the relational atoms from the body
             body=minimization_helper(body,body_new,head);
             String output=Print_Body(head,body);
@@ -432,7 +436,7 @@ public class CQMinimizer {
 
         try {
             Query query = QueryParser.parse(Paths.get(filename));
-            // Query query = QueryParser.parse("Q(x, y) :- R(x, z), S(y, z, w)");
+//             Query query = QueryParser.parse("Q(x, y) :- R(x, z), S(y, z, w)");
             // Query query = QueryParser.parse("Q(x) :- R(x, 'z'), S(4, z, w)");
 
         }
