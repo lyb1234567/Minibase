@@ -32,6 +32,7 @@ public class Minibase {
 
     public static void evaluateCQ(String databaseDir, String inputFile, String outputFile) {
         // TODO: add your implementation
+
     }
 
     /**
