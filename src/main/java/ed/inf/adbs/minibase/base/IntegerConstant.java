@@ -16,6 +16,11 @@ public class IntegerConstant extends Constant {
         return value.toString();
     }
 
+    /**
+     * Override equals method for IntegerConstant object.
+     * @param obj take another IntegerConstant Object as input to compare
+     * @return return boolean to check if two objects are equal
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -40,6 +45,11 @@ public class IntegerConstant extends Constant {
         return this.getValue().hashCode();
 
     }
+
+    /**
+     * Deep copy for InterConstant Object, where the value of the constant is only considered
+     * @return return a new IntegerConstant Object
+     */
     @Override
     public IntegerConstant deepcopy()
     {

@@ -41,6 +41,10 @@ public class Head {
         return name + "(" + Utils.join(variables, ", ") + ", " + agg + ")";
     }
 
+    /**
+     * Deep copy of head object
+     * @return return a new head object, where the variable and SumAggregate object are all deep copied
+     */
     public Head deepcopy()
     {
         SumAggregate new_agg= this.agg.deepcopy();

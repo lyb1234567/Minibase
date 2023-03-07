@@ -141,6 +141,10 @@ public class RelationalAtom extends Atom {
         return Objects.hash(this.name, this.terms);
     }
 
+    /**
+     * Deep copy for RelationalAtom Object, where deep copy of terms and names are considered
+     * @return return a new RelationalAtom Object
+     */
     public RelationalAtom deepcopy()
     {
         List<Term> termList = new ArrayList<>();

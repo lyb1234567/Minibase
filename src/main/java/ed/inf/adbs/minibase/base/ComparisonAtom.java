@@ -32,11 +32,20 @@ public class ComparisonAtom extends Atom {
     }
 
 
+    /**
+     * Override hashCode for ComparisonAtom and hence it can be remove from a hashset,if there is a duplicate ComparisonAtom object
+     * @return hashCode should be an integer, since it takse two terms and one ComparisonOperater object, the hashcode will be multiplication of their hashcode
+     */
     @Override
     public int hashCode()
     {
         return this.term1.hashCode()*this.term2.hashCode()*this.op.hashCode();
     }
+
+    /**
+     * Deep copy of ComparisonAtom Object
+     * @return return a new ComparisonAtom Object
+     */
     public ComparisonAtom deepcopy()
     {
         Term new_1 = this.term1.deepcopy();

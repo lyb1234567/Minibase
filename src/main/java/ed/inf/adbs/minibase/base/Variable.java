@@ -36,6 +36,10 @@ public class Variable extends Term {
         return this.getName().hashCode();
     }
 
+    /**
+     * Deep copy for Variable Object, where only name is considered
+     * @return return a new Variable Object
+     */
     public Variable deepcopy()
     {
         return new Variable(this.name);

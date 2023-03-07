@@ -28,6 +28,10 @@ public class Query {
         return head + " :- " + Utils.join(body, ", ");
     }
 
+    /**
+     * Deep Copy for query object, where deep copy of body and head are considered
+     * @return return a new query object
+     */
     public Query deepcopy()
     {
         Head new_head=this.head.deepcopy();

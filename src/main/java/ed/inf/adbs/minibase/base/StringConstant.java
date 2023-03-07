@@ -39,6 +39,10 @@ public class StringConstant extends Constant {
         return this.getValue().hashCode();
     }
 
+    /**
+     * Deep copy for StringConstant Object, where only value is considered
+     * @return return a new StringConstant Object
+     */
     public StringConstant deepcopy()
     {
         return new StringConstant(this.getValue());

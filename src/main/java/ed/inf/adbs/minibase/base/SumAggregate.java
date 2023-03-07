@@ -36,6 +36,10 @@ public class SumAggregate extends Term {
         }
         return hashCode;
     }
+    /**
+     * Deep copy for SumAggregate Object, where only productterm, which are list of Terms, is considered
+     * @return return a new SumAggregate Object
+     */
     public SumAggregate deepcopy()
     {
         List<Term> termList = new ArrayList<>();
