@@ -64,8 +64,8 @@ public class Tuple {
     }
 
     /**
-     *
-     * @return
+     * This method is used to deep copy the tuple object
+     * @return it return a tuple type
      */
     public Tuple deepcopy()
     {
