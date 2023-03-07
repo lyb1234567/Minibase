@@ -1,6 +1,7 @@
 package ed.inf.adbs.minibase.dbStructure;
 import ed.inf.adbs.minibase.base.Constant;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -60,6 +61,21 @@ public class Tuple {
     public int hashCode()
     {
         return Objects.hashCode(fields);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Tuple deepcopy()
+    {
+        List<Constant> new_fields= new ArrayList<>();
+        for(int i=0;i< fields.size();i++)
+        {
+            Constant constant = (Constant) this.fields.get(i).deepcopy();
+            new_fields.add(constant);
+        }
+        return new Tuple(new_fields);
     }
 
 
