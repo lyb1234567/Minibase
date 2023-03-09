@@ -2,7 +2,7 @@ package ed.inf.adbs.minibase;
 
 import ed.inf.adbs.minibase.base.*;
 import ed.inf.adbs.minibase.parser.QueryParser;
-import sun.font.TrueTypeFont;
+//import sun.font.TrueTypeFont;
 
 import java.io.IOException;
 import java.io.BufferedWriter;

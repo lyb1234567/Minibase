@@ -3,6 +3,7 @@ package ed.inf.adbs.minibase;
 import ed.inf.adbs.minibase.base.Atom;
 import ed.inf.adbs.minibase.base.Query;
 import ed.inf.adbs.minibase.base.Head;
+import ed.inf.adbs.minibase.dbStructure.DatabaseCatalog;
 import ed.inf.adbs.minibase.parser.QueryParser;
 
 import java.nio.file.Paths;
@@ -24,6 +25,7 @@ public class Minibase {
         String databaseDir = args[0];
         String inputFile = args[1];
         String outputFile = args[2];
+
 
 //        evaluateCQ(databaseDir, inputFile, outputFile);
 
