@@ -38,4 +38,23 @@ public class Relation {
     public void setFileLocation(String Location) {
         this.Location = Location;
     }
+
+    /**
+     * Override equals method for Relation for later test
+     * @param obj take relation obejct to compare
+     * @return return a boolean
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(this==obj)
+        {
+            return true;
+        }
+        if(obj==null || getClass()!=obj.getClass())
+        {
+            return false;
+        }
+        return (this.name.equals(((Relation) obj).name) && this.schema.equals(((Relation) obj).schema));
+    }
 }
