@@ -22,7 +22,7 @@ public class DatabaseCatalog {
 
 
     // Map for Schema, String is is also used as the  Relation name, for example {R=schema}
-    private HashMap<String, Schema> schemaMap;
+    private HashMap<String, Schema> schemaMap = new HashMap<>();
 
     /**
      *  returns if the instance if it is already initialised. Otherwise initialises a new instance and returns it.
@@ -80,9 +80,9 @@ public class DatabaseCatalog {
                    typeList.add(lineList.get(i));
                }
               Schema addSchema = new Schema(relationName,typeList);
-              newMap.put(relationName,addSchema);
+               this.schemaMap.put(relationName,addSchema);
            }
-           this.schemaMap=newMap;
+
     }
 
     /**
@@ -127,9 +127,8 @@ public class DatabaseCatalog {
             // Set the relationMap, which contains relationName, Schema and corresponding relationPath
             String relationPath = file.getPath();
             Relation setRelation = new Relation(relationName, this.schemaMap.get(relationName), relationPath);
-            newMap.put(relationName,setRelation);
+            this.relationMap.put(relationName,setRelation);
         }
-        this.relationMap=newMap;
 
     }
 

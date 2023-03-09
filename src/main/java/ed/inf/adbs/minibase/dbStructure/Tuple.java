@@ -63,6 +63,10 @@ public class Tuple {
         return Objects.hashCode(fields);
     }
 
+    public List<Constant> getFields() {
+        return fields;
+    }
+
     /**
      * This method is used to deep copy the tuple object
      * @return it return a tuple type

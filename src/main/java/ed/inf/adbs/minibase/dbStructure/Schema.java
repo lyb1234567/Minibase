@@ -40,7 +40,7 @@ public class Schema {
      */
     public List<String> getDataTypes()
     {
-        return this.getDataTypes();
+        return this.dataTypes;
     }
 
     /**
