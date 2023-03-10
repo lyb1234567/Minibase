@@ -15,6 +15,11 @@ public abstract class Operator {
      */
     public abstract void reset();
 
+    /**
+     * This dump method is used to check print of different operators, it will call different getnext tuples for different operators that extend Operators
+     * @param relName
+     * @throws IOException
+     */
     public void dump(String relName) throws IOException {
         Tuple nextTuple = getNextTuple();
         String writename = relName+".csv";
@@ -48,11 +53,6 @@ public abstract class Operator {
             e.printStackTrace();
         }
 
-//        while (nextTuple != null)
-//        {
-//            System.out.println(nextTuple.getFields());
-//            nextTuple=getNextTuple();
-//        }
     }
 
 }
