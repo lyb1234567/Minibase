@@ -102,7 +102,7 @@ public class ScanOperator extends Operator{
             }
             else if (schemaElement.equals("string"))
             {
-                StringConstant tupleConstant = new StringConstant(tupleLineSplit[i].trim());
+                StringConstant tupleConstant = new StringConstant(tupleLineSplit[i].replace("'", "").trim());
                 addList.add(tupleConstant);
             }
         }

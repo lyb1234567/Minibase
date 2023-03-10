@@ -1,8 +1,8 @@
 package ed.inf.adbs.minibase.evaluator;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+
 public abstract class Operator {
     /**
      * Abstract method for Opeartor to return next tuple
@@ -15,13 +15,44 @@ public abstract class Operator {
      */
     public abstract void reset();
 
-    public void dump() throws IOException {
+    public void dump(String relName) throws IOException {
         Tuple nextTuple = getNextTuple();
-        while (nextTuple != null)
+        String writename = relName+".csv";
+        // Write to a file
+        try
         {
-            System.out.println(nextTuple.getFields());
-            nextTuple=getNextTuple();
+            String fileName = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test"+File.separator+writename;
+            File file = new File(fileName);
+            PrintStream out = new PrintStream(fileName);
+            while (nextTuple !=null)
+            {
+                String result="";
+                System.out.println(nextTuple.getFields());
+                for(int i=0;i<nextTuple.getFields().size();i++)
+                {
+                    if( i == nextTuple.getFields().size()-1)
+                    {
+                        result=result+" "+nextTuple.getFields().get(i);
+                    }
+                    else
+                    {
+                        result=result+" "+nextTuple.getFields().get(i)+",";
+                    }
+                }
+                out.println(result);
+                nextTuple=getNextTuple();
+            }
+            out.close();
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        while (nextTuple != null)
+//        {
+//            System.out.println(nextTuple.getFields());
+//            nextTuple=getNextTuple();
+//        }
     }
 
 }
