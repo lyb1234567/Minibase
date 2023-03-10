@@ -42,6 +42,18 @@ public class ComparisonAtom extends Atom {
         return this.term1.hashCode()*this.term2.hashCode()*this.op.hashCode();
     }
 
+    public void setTerm1(Term term1) {
+        this.term1 = term1;
+    }
+
+    public void setTerm2(Term term2) {
+        this.term2 = term2;
+    }
+
+    public void setOp(ComparisonOperator op) {
+        this.op = op;
+    }
+
     /**
      * Deep copy of ComparisonAtom Object
      * @return return a new ComparisonAtom Object

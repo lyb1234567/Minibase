@@ -20,7 +20,6 @@ ed\inf\adbs\minibase\parser\generated\MinibaseParser$SumaggContext.class
 ed\inf\adbs\minibase\base\ComparisonOperator.class
 ed\inf\adbs\minibase\dbStructure\Tuple.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$TermContext.class
-ed\inf\adbs\minibase\base\Operator.class
 ed\inf\adbs\minibase\parser\QueryParser$TermVisitor.class
 ed\inf\adbs\minibase\parser\generated\MinibaseListener.class
 ed\inf\adbs\minibase\parser\generated\MinibaseLexer.class
@@ -40,4 +39,5 @@ ed\inf\adbs\minibase\parser\generated\MinibaseParser.class
 ed\inf\adbs\minibase\parser\generated\MinibaseVisitor.class
 ed\inf\adbs\minibase\base\IntegerConstant.class
 ed\inf\adbs\minibase\CQMinimizer.class
+ed\inf\adbs\minibase\evaluator\Operator.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$BodyContext.class

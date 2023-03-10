@@ -22,6 +22,7 @@ public enum ComparisonOperator {
         return text;
     }
 
+
     public static ComparisonOperator fromString(String s) throws NoSuchElementException {
         return Arrays.stream(values())
                 .filter(op -> op.text.equalsIgnoreCase(s))
