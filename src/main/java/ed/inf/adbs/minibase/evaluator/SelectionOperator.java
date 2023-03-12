@@ -29,7 +29,7 @@ public class SelectionOperator extends Operator {
         while ((tupleInQuestion  = childOperator.getNextTuple()) != null) {
             if (checkAllPredicate(tupleInQuestion, this.Predicates ,this.relationalAtom)) {
                 nextTuple = tupleInQuestion;
-                System.out.println(tupleInQuestion.getFields());
+                break;
             }
         }
         return nextTuple;
@@ -120,7 +120,7 @@ public class SelectionOperator extends Operator {
      */
     public static Constant tupleSubstitutionRelationAtom(RelationalAtom relationalAtom, Variable variable, Tuple tuple) {
         int index = relationalAtom.getTerms().indexOf(variable);
-        if (index > 0) {
+        if (index >=0) {
             return tuple.getFields().get(index);
         } else {
             throw new IllegalArgumentException("The input tuple can not be matched to the souce relationAtom");
@@ -167,11 +167,10 @@ public class SelectionOperator extends Operator {
             throw new IllegalArgumentException("The length of tuple should match the length of the corresponding relational Atom");
         }
         int index=0;
-        boolean checkRelation=false;
+        boolean checkRelation=true;
         // Check if the relation atom contains any constant class
         if (sourceRelationAtom.getTerms().stream().anyMatch(Constant.class::isInstance))
         {
-
             List<Term> termList = sourceRelationAtom.getTerms();
             for( Term relationAtom : termList)
             {
@@ -252,6 +251,10 @@ public class SelectionOperator extends Operator {
         if (compareResult>0)
         {
             return (operator.equals(ComparisonOperator.GT) || operator.equals(ComparisonOperator.GEQ));
+        }
+        if(compareResult==0)
+        {
+            return operator.equals(ComparisonOperator.EQ);
         }
         else
         {

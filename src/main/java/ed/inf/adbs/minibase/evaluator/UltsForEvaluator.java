@@ -63,13 +63,13 @@ public class UltsForEvaluator {
             throw new IllegalArgumentException("The length of tuple fields doesn't match the number of terms in relation atom!!");
         }
         int indexVariable= relationalAtom.getTerms().indexOf(variable);
-        if(indexVariable>0)
+        if(indexVariable>=0)
         {
             return tuple.getFields().get(indexVariable);
         }
         else
         {
-            throw new IllegalArgumentException("Does not find relevant index of the varibale in the corresponding relation!!");
+            return null;
         }
     }
 }

@@ -87,6 +87,10 @@ public class ProjectionOperator extends Operator{
         for(Variable projectionVariable : this.projectionVariables)
         {
             Constant variableConstant = getConstantFromVariable(projectionVariable,tuple);
+            if (variableConstant==null)
+            {
+                continue;
+            }
             constantList.add(variableConstant);
         }
         return new Tuple(constantList);
