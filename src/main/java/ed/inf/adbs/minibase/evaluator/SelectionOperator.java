@@ -21,11 +21,6 @@ public class SelectionOperator extends Operator {
         this.Predicates = Predicates;
     }
 
-    /**
-     * This getNextTuple is used to
-     * @return
-     * @throws IOException
-     */
 
     @Override
     public Tuple getNextTuple() throws IOException {
@@ -34,7 +29,7 @@ public class SelectionOperator extends Operator {
         while ((tupleInQuestion  = childOperator.getNextTuple()) != null) {
             if (checkAllPredicate(tupleInQuestion, this.Predicates ,this.relationalAtom)) {
                 nextTuple = tupleInQuestion;
-                break;
+                System.out.println(tupleInQuestion.getFields());
             }
         }
         return nextTuple;
@@ -108,7 +103,7 @@ public class SelectionOperator extends Operator {
      */
     public boolean checkAllPredicate(Tuple tuple, List<ComparisonAtom> comparisonAtomList, RelationalAtom sourceRelationAtom)
     {
-            for(int i=0;i<comparisonAtomList.size();i++)
+        for(int i=0;i<comparisonAtomList.size();i++)
         {
             ComparisonAtom curPredicate = comparisonAtomList.get(i);
             boolean checkPredicate = passPredicate(tuple,curPredicate,sourceRelationAtom);
@@ -172,7 +167,7 @@ public class SelectionOperator extends Operator {
             throw new IllegalArgumentException("The length of tuple should match the length of the corresponding relational Atom");
         }
         int index=0;
-        boolean checkRelation=true;
+        boolean checkRelation=false;
         // Check if the relation atom contains any constant class
         if (sourceRelationAtom.getTerms().stream().anyMatch(Constant.class::isInstance))
         {
