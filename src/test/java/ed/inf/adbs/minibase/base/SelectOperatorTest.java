@@ -29,8 +29,6 @@ public class SelectOperatorTest {
         databaseCatalog.constructSchemaMap(schemaFilePath);
         HashMap<String,Schema> SchemaMap = databaseCatalog.getSchemaMap();
         Schema testSchema1 = SchemaMap.get("R");
-        Schema testSchema2 = SchemaMap.get("T");
-        Schema testSchema3 = SchemaMap.get("S");
         List<Atom> body =  query.getBody();
         List<RelationalAtom> relationalAtoms = new ArrayList<>();
         List<ComparisonAtom> comparisonAtoms = new ArrayList<>();
@@ -50,14 +48,27 @@ public class SelectOperatorTest {
         }
         String fileName1="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"files"+File.separator+"R.csv";
         RelationalAtom relationalAtom = relationalAtoms.get(0);
+
         ComparisonAtom comparisonAtom = comparisonAtoms.get(0);
-        System.out.println(comparisonAtom);
         ScanOperator scanOperator_1 = new ScanOperator(fileName1,testSchema1,relationalAtom);
         SelectionOperator selectionOperator = new SelectionOperator(relationalAtom,scanOperator_1,comparisonAtoms);
-        System.out.println(selectionOperator.getNextTuple().getFields());
-        System.out.println(selectionOperator.getNextTuple().getFields());
+        selectionOperator.dump("query4","select","txt");
 
-        // compare
+        // compare Test queries for select operator
+        String  outputFile1="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_select"+File.separator+"query1.txt";
+        String  outputFile2="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_select"+File.separator+"query2.txt";
+        String  outputFile3="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_select"+File.separator+"query3.txt";
+        String  outputFile4="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_select"+File.separator+"query4.txt";
 
+
+        String Compare1="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query1.csv";
+        String Compare2="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query2.csv";
+        String Compare3="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query3.csv";
+        String Compare4="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query4.csv";
+
+        assert (TestUlits.compareFile(outputFile1,Compare1));
+        assert (TestUlits.compareFile(outputFile2,Compare2));
+        assert (TestUlits.compareFile(outputFile3,Compare3));
+        assert (TestUlits.compareFile(outputFile4,Compare4));
     }
 }
