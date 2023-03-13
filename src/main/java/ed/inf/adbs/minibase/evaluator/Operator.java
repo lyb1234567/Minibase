@@ -20,19 +20,18 @@ public abstract class Operator {
      * @param relName
      * @throws IOException
      */
-    public void dump(String relName) throws IOException {
+    public void dump(String relName,String underScoreName,String extension) throws IOException {
         Tuple nextTuple = getNextTuple();
-        String writename = relName+".csv";
+        String writename = relName+"."+extension;
         // Write to a file
         try
         {
-            String fileName = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test"+File.separator+writename;
+            String fileName = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test"+"_"+underScoreName+File.separator+writename;
             File file = new File(fileName);
             PrintStream out = new PrintStream(fileName);
             while (nextTuple !=null)
             {
                 String result="";
-                System.out.println(nextTuple.getFields());
                 for(int i=0;i<nextTuple.getFields().size();i++)
                 {
                     if( i == nextTuple.getFields().size()-1)
