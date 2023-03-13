@@ -144,9 +144,14 @@ public class SelectionOperator extends Operator {
         }
 
         if (comparisonAtom2 instanceof Variable) {
-            term1 = tupleSubstitutionRelationAtom(relationalAtom, (Variable) comparisonAtom2, tuple);
+            term2 = tupleSubstitutionRelationAtom(relationalAtom, (Variable) comparisonAtom2, tuple);
         } else {
             term2 = (Constant) comparisonAtom.getTerm2();
+        }
+
+        if (comparisonAtom1 instanceof Variable && comparisonAtom2 instanceof Variable) {
+            term1 = tupleSubstitutionRelationAtom(relationalAtom, (Variable) comparisonAtom1, tuple);
+            term2 = tupleSubstitutionRelationAtom(relationalAtom, (Variable) comparisonAtom2, tuple);
         }
         ComparisonOperator operator = comparisonAtom.getOp();
         return new ComparisonAtom(term1, term2, operator);
