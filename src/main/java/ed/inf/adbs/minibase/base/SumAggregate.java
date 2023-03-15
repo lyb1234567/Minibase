@@ -22,6 +22,15 @@ public class SumAggregate extends Term {
         return "SUM(" + Utils.join(productTerms, " * ") + ")";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SumAggregate that = (SumAggregate) o;
+        return productTerms.equals(that.productTerms);
+    }
+
     /**
      * Override hashcode for SumAggregate so that it can be removed, if there is a duplicate SumAggregate object in the hashset
      * @return hashCode should be a integer

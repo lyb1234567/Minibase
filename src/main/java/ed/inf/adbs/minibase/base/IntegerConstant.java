@@ -1,5 +1,7 @@
 package ed.inf.adbs.minibase.base;
 
+import java.util.Objects;
+
 public class IntegerConstant extends Constant {
     private Integer value;
 
@@ -16,34 +18,18 @@ public class IntegerConstant extends Constant {
         return value.toString();
     }
 
-    /**
-     * Override equals method for IntegerConstant object.
-     * @param obj take another IntegerConstant Object as input to compare
-     * @return return boolean to check if two objects are equal
-     */
     @Override
-    public boolean equals(Object obj)
-    {
-        // if it does not satisfy the default equals, then return false
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        else
-        {
-            //Then compare the value of the two objects
-            return ((IntegerConstant) obj).getValue().equals(this.getValue());
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        IntegerConstant that = (IntegerConstant) o;
+        return value.equals(that.value);
     }
 
-    /**
-     * Override hashcode for Integer Constant, so that it can be removed if there is a duplicate Integer constant in hashset
-     * @return Hashcode is a integer
-     */
-    @Override public int hashCode()
-    {
-        return this.getValue().hashCode();
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
     /**

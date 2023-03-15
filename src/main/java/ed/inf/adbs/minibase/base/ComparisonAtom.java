@@ -18,6 +18,15 @@ public class ComparisonAtom extends Atom {
         return term1;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ComparisonAtom that = (ComparisonAtom) o;
+        return term1.equals(that.term1) && term2.equals(that.term2) && op == that.op;
+    }
+
     public Term getTerm2() {
         return term2;
     }

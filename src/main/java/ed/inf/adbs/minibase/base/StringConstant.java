@@ -1,5 +1,7 @@
 package ed.inf.adbs.minibase.base;
 
+import java.util.Objects;
+
 public class StringConstant extends Constant {
     private String value;
 
@@ -17,26 +19,17 @@ public class StringConstant extends Constant {
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        else
-        {
-            return ((StringConstant) obj).getValue().equals(this.getValue());
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        StringConstant that = (StringConstant) o;
+        return value.equals(that.value);
     }
 
-    /**
-     * Override hashcode() for String constant, so that it can be removed in hashset,if there is a duplicate StringConstant Object
-     * @return Hashcode is a Integer
-     */
     @Override
-    public int hashCode()
-    {
-        return this.getValue().hashCode();
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
     /**

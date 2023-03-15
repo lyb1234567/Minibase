@@ -107,38 +107,17 @@ public class RelationalAtom extends Atom {
 
 
     @Override
-    public boolean equals(Object obj)
-    {
-
-//        if(obj==null || !(obj instanceof RelationalAtom))
-//            return false;
-        List<Term>  check = ((RelationalAtom) obj).getTerms();
-        if( ((RelationalAtom) obj).getTerms().size()!= this.terms.size())
-        {
-            return false;
-        }
-        for(int i=0;i<this.terms.size();i++)
-        {
-            if (this.terms.get(i).toString().equals(check.get(i).toString()))
-            {
-                continue;
-            }
-            else
-            {
-              return false;
-            }
-        }
-        return (this.name).equals(((RelationalAtom) obj).getName());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        RelationalAtom that = (RelationalAtom) o;
+        return name.equals(that.name) && terms.equals(that.terms);
     }
 
-    /**
-     * Override hashcode for relational atom, so that it can be removed from the hashset(), if there is a duplicate relationalatom object
-     * @return hashCode is an integer
-     */
     @Override
-    public int hashCode()
-    {
-        return Objects.hash(this.name, this.terms);
+    public int hashCode() {
+        return Objects.hash(name, terms);
     }
 
     /**

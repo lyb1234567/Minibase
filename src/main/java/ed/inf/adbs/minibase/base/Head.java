@@ -4,6 +4,7 @@ import ed.inf.adbs.minibase.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Head {
     private String name;
@@ -11,6 +12,19 @@ public class Head {
     private List<Variable> variables;
 
     private SumAggregate agg;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Head head = (Head) o;
+        return name.equals(head.name) && variables.equals(head.variables) && agg.equals(head.agg);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, variables, agg);
+    }
 
     public Head(String name, List<Variable> variables, SumAggregate agg) {
         this.name = name;

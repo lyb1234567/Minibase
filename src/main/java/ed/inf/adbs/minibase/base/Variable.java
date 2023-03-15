@@ -1,5 +1,7 @@
 package ed.inf.adbs.minibase.base;
 
+import java.util.Objects;
+
 public class Variable extends Term {
     private String name;
 
@@ -17,23 +19,17 @@ public class Variable extends Term {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (!super.equals(object)) return false;
-
-        String name1=this.getName();
-        String name2= ((Variable)object).getName();
-        return name1.equals(name2);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Variable variable = (Variable) o;
+        return name.equals(variable.name);
     }
 
-    /**
-     * Override hashCode for Variable object,so it can be removed from the hashset if there is a duplicate
-     * @return hashCode should be an integer
-     */
-
     @Override
-    public int hashCode()
-    {
-        return this.getName().hashCode();
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     /**
