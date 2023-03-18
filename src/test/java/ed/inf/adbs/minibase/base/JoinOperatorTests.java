@@ -1,142 +1,182 @@
 package ed.inf.adbs.minibase.base;
+import ed.inf.adbs.minibase.dbStructure.DatabaseCatalog;
+import ed.inf.adbs.minibase.dbStructure.Schema;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 import ed.inf.adbs.minibase.evaluator.JoinOperator;
+import ed.inf.adbs.minibase.evaluator.ScanOperator;
+import ed.inf.adbs.minibase.parser.QueryParser;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static ed.inf.adbs.minibase.evaluator.JoinOperator.subFromLeftandRight;
+import static org.junit.Assert.*;
 
 public class JoinOperatorTests {
-    private final Variable variablex = new Variable("x");
-    private final Variable variabley = new Variable("y");
-    private final Variable variablez = new Variable("z");
-    private final Variable variablef = new Variable("f");
-    Variable variableg = new Variable("g");
-    Variable variableh = new Variable("h");
-    Variable variablej = new Variable("j");
-    Variable variablek = new Variable("j");
 
 
-    private final Constant stringConstantX1 = new StringConstant("X");
-    private final Constant stringConstantX2 = new StringConstant("X");
+    // Used variables
 
-    private final Constant integerConstant69TheFirst = new IntegerConstant(69);
-    private final Constant integerConstant69TheSecond = new IntegerConstant(69);
+    private  Variable variablex=new Variable("x");
+    private  Variable variabley=new Variable("y");
+    private  Variable variablez=new Variable("z");
+    private  Variable variabler=new Variable("r");
+    private  Variable variablea=new Variable("a");
+    private  Variable variableb=new Variable("b");
+    private  Variable variablec=new Variable("c");
 
-    private final Constant integerConstant420 = new IntegerConstant(420);
-    private final Constant stringConstantXXX = new StringConstant("XXX");
 
-    private final ComparisonAtom xLTy = new ComparisonAtom(variablex, variabley, ComparisonOperator.LT);
-    private final ComparisonAtom xGTy = new ComparisonAtom(variablex, variabley, ComparisonOperator.GT);
-    private final ComparisonAtom fGTy = new ComparisonAtom(variablef, variabley, ComparisonOperator.GT);
-    private final ComparisonAtom xLT420 = new ComparisonAtom(variablex, integerConstant420, ComparisonOperator.LT);
-    private final ComparisonAtom integer69LT420 = new ComparisonAtom(integerConstant69TheFirst, integerConstant420, ComparisonOperator.LT);
 
-    private final List<Term> variableTerms = new ArrayList<Term>() {{
+    // Used Integer Constants
+    private  IntegerConstant integerConstant11= new IntegerConstant(11);
+    private  IntegerConstant integerConstant12= new IntegerConstant(12);
+    private  IntegerConstant integerConstant13= new IntegerConstant(13);
+    private  IntegerConstant integerConstant14= new IntegerConstant(14);
+    private  IntegerConstant integerConstant5= new IntegerConstant(5);
+
+
+    // Used String Constants
+    private  StringConstant stringConstant1= new StringConstant("abc");
+    private  StringConstant stringConstant2= new StringConstant("xyz");
+    private  StringConstant stringConstant3= new StringConstant("name");
+    private  StringConstant stringConstant4= new StringConstant("Mike");
+
+
+    // Used RelationalAtoms
+    private final List<Term> variableTermsR = new ArrayList<Term>() {{
         add(variablex);
         add(variabley);
         add(variablez);
     }};
 
-    private final RelationalAtom rightRelationalAtom = new RelationalAtom("R", variableTerms);
 
-    private final List<Constant> tupleContents = new ArrayList<Constant>() {{
-        add(integerConstant69TheFirst);
-        add(integerConstant420);
-        add(stringConstantXXX);
+    private  final List<Term> variableTermsS=new ArrayList<Term>() {{
+        add(variablea);
+        add(variableb);
+        add(variablec);
     }};
 
-    private final Tuple testRightTuple = new Tuple(tupleContents);
-    private final Variable variablexCopy = new Variable("x");
 
-    private final List<Constant> leftTupleContents = new ArrayList<Constant>() {{
-        add(integerConstant69TheSecond);
-        add(stringConstantX1);
-        add(integerConstant69TheFirst);
-        add(stringConstantXXX);
-    }};
 
-    private final List<Term> leftRelAtom1Terms = new ArrayList<Term>() {{
+    private  final List<Term> variableTermsT=new ArrayList<Term>() {{
         add(variablex);
-        add(variablef);
+        add(variabler);
     }};
 
-    private final List<Term> leftRelAtom2Terms = new ArrayList<Term>() {{
-        add(variablex);
-        add(variablez);
+    private  RelationalAtom relationalAtomR = new RelationalAtom("R",variableTermsR);
+    private  RelationalAtom relationalAtomS = new RelationalAtom("S",variableTermsS);
+
+
+    private  RelationalAtom relationalAtomT = new RelationalAtom("T",variableTermsT);
+
+
+
+    private final List<RelationalAtom> relationalAtomList = new ArrayList<RelationalAtom>()
+    {
+        {
+            add(relationalAtomR);
+            add(relationalAtomS);
+        }
+    };
+
+    private final List<Constant> constantListLeft = new ArrayList<Constant>(){
+        {
+            add(integerConstant12);
+            add(integerConstant12);
+            add(stringConstant1);
+            add(integerConstant13);
+            add(integerConstant12);
+            add(stringConstant2);
+        }
+    };
+
+    private final  List<Constant> constantListRight= new ArrayList<Constant>(){{
+        add(integerConstant12);
+        add(integerConstant12);
     }};
 
-    private final RelationalAtom leftRelationalAtom1 = new RelationalAtom("Rel1", leftRelAtom1Terms);
-    private final RelationalAtom leftRelationalAtom2 = new RelationalAtom("Rel2", leftRelAtom2Terms);
+    // Test Left Tuple
+    private final Tuple LeftTuple = new Tuple(constantListLeft);
 
-    private final List<RelationalAtom> leftRelationalAtoms = new ArrayList<RelationalAtom>() {{
-        add(leftRelationalAtom1);
-        add(leftRelationalAtom2);
-    }};
+    // Test Right Tuple
+    private final Tuple RightTuple = new Tuple(constantListRight);
 
-    List<Term> unrelatedTerms1 = new ArrayList<Term>() {{
-        add(variableg);
-        add(variableh);
-
-    }};
-
-    List<Term> unrelatedTerms2 = new ArrayList<Term>() {{
-        add(variablej);
-        add(variablek);
-    }};
-
-    RelationalAtom unrelatedRelationalatom1 = new RelationalAtom("UnRel1", unrelatedTerms1);
-    RelationalAtom unrelatedRelationalatom2 = new RelationalAtom("UnRel2", unrelatedTerms2);
-
-    List<RelationalAtom> unrelatedRelationalAtomsList = new ArrayList<RelationalAtom>() {{
-        add(unrelatedRelationalatom1);
-        add(unrelatedRelationalatom2);
-    }};
-
-    Tuple leftTuple = new Tuple(leftTupleContents);
-
+    // Used Comparison Atoms
+    private  final ComparisonAtom comparisonAtom1 = new ComparisonAtom(variablex,integerConstant11,ComparisonOperator.GT);
+    private  final ComparisonAtom comparisonAtom2 = new ComparisonAtom(variablex,stringConstant2,ComparisonOperator.EQ);
+    private  final ComparisonAtom comparisonAtom3 = new ComparisonAtom(variablex,stringConstant3,ComparisonOperator.LT);
+    private  final ComparisonAtom comparisonAtom4 = new ComparisonAtom(variablex,stringConstant4,ComparisonOperator.LEQ);
     @Test
-    public void test_joinAcceptedSimpleCase() {
-        assertTrue(JoinOperator.passesSelectionPredicatesRelationalAtomLists (leftTuple, testRightTuple, leftRelationalAtoms, rightRelationalAtom, new ArrayList<>()));
+    public void testpassesSelectionPredicatesRelationalAtomLists() throws IOException {
+        Query query1 = QueryParser.parse("Q(x,y,z) :- R(x, y, z)");
+        Query query2 = QueryParser.parse("Q(x,r) :- T(x, r)");
+        Query query3 = QueryParser.parse("Q(a,b,c) :- S(a, b, c)");
+        String schemaFilePath = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"schema.txt";
+        DatabaseCatalog databaseCatalog = DatabaseCatalog.getCatalog();
+        databaseCatalog.constructSchemaMap(schemaFilePath);
+        HashMap<String, Schema> SchemaMap = databaseCatalog.getSchemaMap();
+        Schema testSchema1 = SchemaMap.get("R");
+        Schema testSchema2 = SchemaMap.get("T");
+        Schema testSchema3 = SchemaMap.get("S");
+        RelationalAtom relationalAtom1 = (RelationalAtom) query1.getBody().get(0);
+        RelationalAtom relationalAtom2 = (RelationalAtom) query2.getBody().get(0);
+        RelationalAtom relationalAtom3 = (RelationalAtom) query3.getBody().get(0);
+        String fileName1="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"files"+File.separator+"R.csv";
+        String fileName2="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"files"+File.separator+"T.csv";
+        String fileName3="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"files"+File.separator+"S.csv";
+
+        ScanOperator scanOperator_1 = new ScanOperator(fileName1,testSchema1,relationalAtom1);
+        ScanOperator scanOperator_2 = new ScanOperator(fileName2,testSchema2,relationalAtom2);
+        ScanOperator scanOperator_3 = new ScanOperator(fileName3,testSchema3,relationalAtom3);
+
+//        Tuple tuple1=scanOperator_1.getNextTuple();
+//        Tuple tuple2=scanOperator_2.getNextTuple();
+//        Tuple tuple3=scanOperator_3.getNextTuple();
+        List<Constant> leftConstant = new ArrayList<>();
+//        leftConstant.addAll(tuple1.getFields());
+//        leftConstant.addAll(tuple2.getFields());
+        Tuple leftTuple=new Tuple(leftConstant);
+        RelationalAtom rightRelationAtom= relationalAtom3;
+//        Tuple rightTuple= tuple2;
+        ComparisonAtom testComparison=new ComparisonAtom(variablex,integerConstant5,ComparisonOperator.GT);
+        List<RelationalAtom> leftRelationalAtoms=new ArrayList<>();
+        leftRelationalAtoms.add(relationalAtom1);
+        List<ComparisonAtom>comparisonAtoms=new ArrayList<ComparisonAtom>();
+        // Left Combined Tuples: 1, 9, 'adbs', 1, 1
+        // Right Tuple: 1,1
+        // Left RelationalAtoms: [R(x, y, z), T(x, r)]
+        // Right RelationalAtom: S(a, b, c)
+//        assertTrue(JoinOperator.passesSelectionPredicatesRelationalAtomLists(leftTuple,rightTuple,leftRelationalAtoms,rightRelationAtom,comparisonAtoms));
+        System.out.println(comparisonAtoms);
+        JoinOperator joinOperator= new JoinOperator(scanOperator_1,scanOperator_2,leftRelationalAtoms,relationalAtom2,comparisonAtoms);
+        joinOperator.dump("crossProductTest","join","txt");
+
     }
 
     @Test
-    public void test_joinFailsSimpleCaseWhereVariablesMismatch() {
-        List<RelationalAtom> reversedLeftRelationalAtoms = new ArrayList<>(leftRelationalAtoms);
-//        Collections.reverse(reversedLeftRelationalAtoms);
-//        assertFalse(JoinOperator.passesSelectionPredicatesMultipleRelations(leftTuple, testRightTuple, reversedLeftRelationalAtoms, rightRelationalAtom, new ArrayList<>()));
+    public void testPassSinglePredicateAccrossRelationAtoms()
+    {
+        /**
+         * Left Tuple: 12, 12, 'abc', 13, 12, 'xyz'
+         * Right Tuple : 12 ,12
+         * LeftRelationAtoms: [R(x, y, z), S(a, b, c)]
+         * RightRelationalAtom: T(x, r)
+         */
+        boolean check = JoinOperator.passSinglePredicate(LeftTuple,RightTuple,comparisonAtom1,relationalAtomList,relationalAtomT);
+        assertTrue(check);
     }
-
+    
+    
     @Test
-    public void test_passesSelectionPredicatesMultipleRelations_allowsCartesianProducts() {
-        assertTrue(JoinOperator.passesSelectionPredicatesRelationalAtomLists(leftTuple, testRightTuple, unrelatedRelationalAtomsList, rightRelationalAtom, new ArrayList<>()));
+    public void testsubFromLeftandRight()
+    {
+        ComparisonAtom comparisonAtom = subFromLeftandRight(comparisonAtom1,LeftTuple,RightTuple,relationalAtomList,relationalAtomT);
+        ComparisonAtom testComparisonAtom = new ComparisonAtom(integerConstant12,integerConstant11,ComparisonOperator.GT);
+        assertEquals(comparisonAtom,testComparisonAtom);
     }
 
-
-    @Test
-    public void test_passesSelectionPredicatesMultipleRelations_correctlyEvaluatesMultiPredicateList() {
-        ComparisonAtom fLTz = new ComparisonAtom(variablef, variablez, ComparisonOperator.LT);
-        List<ComparisonAtom> correctSelectionPredicates = new ArrayList<ComparisonAtom>() {{
-            add(fLTz);
-        }};
-
-        assertTrue(JoinOperator.passesSelectionPredicatesRelationalAtomLists(leftTuple, testRightTuple, leftRelationalAtoms, rightRelationalAtom, correctSelectionPredicates));
-    }
-
-    @Test
-    public void test_passesSelectionPredicatesMultipleRelations_correctlyEvaluateFalseMultiPredicateList() {
-
-        ComparisonAtom fLTz = new ComparisonAtom(variablef, variablez, ComparisonOperator.LT);
-
-        List<ComparisonAtom> correctSelectionPredicates = new ArrayList<ComparisonAtom>() {{
-            add(fLTz);
-            add(xGTy);
-        }};
-
-        assertFalse (JoinOperator.passesSelectionPredicatesRelationalAtomLists(leftTuple, testRightTuple, leftRelationalAtoms, rightRelationalAtom, correctSelectionPredicates));
-
-    }
 }
