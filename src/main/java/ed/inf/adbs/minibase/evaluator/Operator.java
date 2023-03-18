@@ -31,6 +31,7 @@ public abstract class Operator {
             PrintStream out = new PrintStream(fileName);
             while (nextTuple !=null)
             {
+                System.out.println("Current Tuple:"+nextTuple.getFields());
                 String result="";
                 for(int i=0;i<nextTuple.getFields().size();i++)
                 {

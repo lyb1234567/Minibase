@@ -21,10 +21,16 @@ public class Variable extends Term {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
         Variable variable = (Variable) o;
-        return name.equals(variable.name);
+        return this.name.equals(variable.name);
     }
 
     @Override

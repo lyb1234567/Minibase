@@ -1,9 +1,6 @@
 package ed.inf.adbs.minibase.evaluator;
 
-import ed.inf.adbs.minibase.base.Constant;
-import ed.inf.adbs.minibase.base.RelationalAtom;
-import ed.inf.adbs.minibase.base.Term;
-import ed.inf.adbs.minibase.base.Variable;
+import ed.inf.adbs.minibase.base.*;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 
 import java.util.ArrayList;
@@ -31,6 +28,7 @@ public class UltsForEvaluator {
                 checkNum++;
             }
         }
+
         if(checkNum!=combinedTuples.getFields().size())
         {
             throw new IllegalArgumentException("The total number of terms form the relationAtom list does not match the number of constants of combined tuples");
@@ -45,10 +43,6 @@ public class UltsForEvaluator {
 
             if (indexVariable >= 0) {
                 constantList.add(combinedTuples.getFields().get(indexVariable + offset));
-            }
-            else
-            {
-              throw new IllegalArgumentException("Do not find relevant index in the current relationAtom !!!");
             }
             offset=offset+termList.size();
         }
@@ -70,6 +64,94 @@ public class UltsForEvaluator {
         else
         {
             return null;
+        }
+    }
+
+    public static boolean checkSingleRelationAtoms(ComparisonAtom comparisonAtom,List<RelationalAtom>relationalAtomList)
+    {
+        Term term1=comparisonAtom.getTerm1();
+        Term term2=comparisonAtom.getTerm2();
+        int checkNum=0;
+        if (term1 instanceof  Variable)
+        {
+            checkNum++;
+        }
+        if (term2 instanceof  Variable)
+        {
+            checkNum++;
+        }
+        if (checkNum == 0 || checkNum == 1) return true;
+
+        for(RelationalAtom relationalAtom : relationalAtomList)
+        {
+             boolean checkOnlyOneTerm = checkRelationSingleComparisonAtom(relationalAtom,term1,term2);
+             if(!checkOnlyOneTerm)
+             {
+                 return false;
+             }
+        }
+        return true;
+    }
+
+    public static  boolean checkRelationSingleComparisonAtom(RelationalAtom relationalAtom,Term term1, Term term2)
+    {
+        boolean hasOnlyOneTerm = true;
+        for (Term term : relationalAtom.getTerms()) {
+            if (term.equals(term1) || term.equals(term2)) {
+                if (!hasOnlyOneTerm) {
+                    return false;
+                }
+                hasOnlyOneTerm = false;
+            }
+        }
+        return !hasOnlyOneTerm;
+    }
+
+    public static boolean compareConstants(Constant constant1, Constant constant2, ComparisonOperator operator) {
+        if (operator.equals(ComparisonOperator.EQ)) {
+            return constant1.equals(constant2);
+        }
+        if (operator.equals(ComparisonOperator.NEQ)) {
+            return !constant1.equals(constant2);
+        }
+
+        int compareResult = checkConstantComparison(constant1,constant2);
+        if (compareResult==Integer.MAX_VALUE)
+        {
+            throw new UnsupportedOperationException("Not supported constant operation!!!");
+        }
+        if (compareResult>0)
+        {
+            return (operator.equals(ComparisonOperator.GT) || operator.equals(ComparisonOperator.GEQ));
+        }
+        if(compareResult==0)
+        {
+            return operator.equals(ComparisonOperator.EQ);
+        }
+        else
+        {
+            return (operator.equals(ComparisonOperator.LEQ) || operator.equals(ComparisonOperator.LT));
+        }
+    }
+
+    public static int checkConstantComparison(Constant constant1, Constant constant2) {
+        if (!constant1.getClass().equals(constant2.getClass())) {
+            throw new IllegalArgumentException("The class of the constants have to be the same");
+        }
+        // If they are Integer Constant
+        if (constant1.getClass().equals(IntegerConstant.class)) {
+            Integer value1 = ((IntegerConstant) constant1).getValue();
+            Integer value2 = ((IntegerConstant) constant2).getValue();
+            return value1.compareTo(value2);
+        }
+        if (constant1.getClass().equals(StringConstant.class)) {
+            String value1 = ((StringConstant)constant1).getValue();
+            String value2 =((StringConstant)constant2).getValue();
+            return value1.compareTo(value2);
+        }
+        else
+        {
+            return Integer.MAX_VALUE;
         }
     }
 }
