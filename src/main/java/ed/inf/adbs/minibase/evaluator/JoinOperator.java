@@ -30,32 +30,50 @@ public class JoinOperator extends Operator {
         this.innerTuple = null;
     }
 
+    /**
+     * This getNextTuple() method returns the next tuple, which passes all the join conditions cross all the relationalAtoms.
+     * For each outer tuple, this method will  try to find a matched innertuple by iterating through the right childAtom's tuple. So, for each line of left tuple, it will first
+     * rest right child operator and iterate all the tuples from the right operators to find a match.
+     * If there is a match (this.outerTuple != null && innerTuple != null), then it will check if the left combined tuples and right tuple satisfy all the predicates across
+     * all the relational Atoms.If so, it will glue them together and return.
+     * @return return a combined tuples from left and right
+     * @throws IOException
+     */
     @Override
     public Tuple getNextTuple() throws IOException {
 
         if (this.outerTuple != null && innerTuple != null) {
 
-            while ((innerTuple = rightChildOperator.getNextTuple()) != null) {
-
-                if (passesSelectionPredicatesRelationalAtomLists(outerTuple, innerTuple, this.leftChildRelationAtoms, this.rightChildRelationAtom, this.Predicates)) {
-                    List<Constant> combinedTerms = new ArrayList<>(outerTuple.getFields());
-                    combinedTerms.addAll(innerTuple.getFields());
-                    return new Tuple(combinedTerms);
+            innerTuple=rightChildOperator.getNextTuple();
+            while (innerTuple != null) {
+                boolean checkPass =passesSelectionPredicatesRelationalAtomLists(outerTuple, innerTuple, this.leftChildRelationAtoms, this.rightChildRelationAtom, this.Predicates);
+                if (checkPass)
+                {
+                    List<Constant> combinedFields = new ArrayList<>();
+                    combinedFields.addAll(outerTuple.getFields());
+                    combinedFields.addAll(innerTuple.getFields());
+                    return new Tuple(combinedFields);
                 }
+                innerTuple=rightChildOperator.getNextTuple();
             }
         }
 
 
-        while ((outerTuple = leftChidOperator.getNextTuple()) != null) {
+        outerTuple=leftChidOperator.getNextTuple();
+        while ((outerTuple != null) ){
             rightChildOperator.reset();
-
-            while ((innerTuple = rightChildOperator.getNextTuple()) != null) {
-                if (passesSelectionPredicatesRelationalAtomLists(outerTuple, innerTuple, this.leftChildRelationAtoms, this.rightChildRelationAtom, this.Predicates)) {
-                    List<Constant> combinedTerms = new ArrayList<>(outerTuple.getFields());
-                    combinedTerms.addAll(innerTuple.getFields());
-                    return new Tuple(combinedTerms);
+            innerTuple=rightChildOperator.getNextTuple();
+            while (innerTuple != null) {
+                boolean checkPass=passesSelectionPredicatesRelationalAtomLists(outerTuple, innerTuple, this.leftChildRelationAtoms, this.rightChildRelationAtom, this.Predicates);
+                if (checkPass)
+                {
+                    List<Constant> combinedFields = new ArrayList<>(outerTuple.getFields());
+                    combinedFields.addAll(innerTuple.getFields());
+                    return new Tuple(combinedFields);
                 }
+                innerTuple=rightChildOperator.getNextTuple();
             }
+            outerTuple=leftChidOperator.getNextTuple();
         }
 
         return null;
