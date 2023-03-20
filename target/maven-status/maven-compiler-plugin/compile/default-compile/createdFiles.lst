@@ -1,5 +1,6 @@
 ed\inf\adbs\minibase\dbStructure\Schema.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$HeadContext.class
+ed\inf\adbs\minibase\evaluator\QueryPlanner.class
 ed\inf\adbs\minibase\parser\QueryParser$AtomVisitor.class
 ed\inf\adbs\minibase\Utils.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$AtomContext.class
