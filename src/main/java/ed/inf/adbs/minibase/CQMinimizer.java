@@ -149,6 +149,21 @@ public class CQMinimizer {
         return true;
     }
 
+    public static boolean checkSame(List<Atom> body,List<Atom>body_copy,Head head)
+    {
+        int cnt =0 ;
+        for(int i=0;i<body_copy.size();i++)
+        {
+            RelationalAtom curAtom =(RelationalAtom) body_copy.get(i);
+            if(! body.contains(curAtom))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     public static RelationalAtom checkDifferent( List<Atom> body,List<Atom>body_copy,Head head)
     {
@@ -157,7 +172,7 @@ public class CQMinimizer {
             RelationalAtom body_atom =(RelationalAtom) body.get(i);
             if (! Is_similar(body_atom,body_copy,head))
             {
-               return body_atom;
+                return body_atom;
             }
 
         }
@@ -185,6 +200,8 @@ public class CQMinimizer {
         // Since we only care about one homomorphism, so if the current homomorphism works, just break
         // Deep copy the body for changing terms
         List<Atom> temp_body=deepCopy_body(originalBody);
+        List<Atom> tempTarget=deepCopy_body(targetBody);
+        RelationalAtom tempDeleted=deletedAtom.deepcopy();
         for(HashMap<Term,Term> map : homo_lst)
         {
             // iterate through the current hashmap,
@@ -200,11 +217,15 @@ public class CQMinimizer {
             // Now we should have a list for storing maping from element and a list for maping to element
 
             // Now iterate through each map_form list and map_to list, User Set_value method to apply homomorphism
-            for(int key=0; key<map_from_lst.size();key++)
+            for(int i =0; i< temp_body.size();i++)
             {
-                Term map_from=map_from_lst.get(key);
-                Term map_to =map_to_lst.get(key);
-                Set_body(temp_body,map_from.toString(),map_to);
+                RelationalAtom tempRelationalAtom = (RelationalAtom) temp_body.get(i);
+                setAtom(tempRelationalAtom,map_from_lst,map_to_lst);
+            }
+            for(int i=0;i<tempTarget.size();i++)
+            {
+                RelationalAtom tempRelationalAtom = (RelationalAtom) tempTarget.get(i);
+                setAtom(tempRelationalAtom,map_from_lst,map_to_lst);
             }
 
             // Now check if the temp_body is a subset of the original body, which means we need make sure each relational atom is the same as that in
@@ -214,6 +235,10 @@ public class CQMinimizer {
 //            temp_body=Remove_repeat(temp_body);
             if (check_subset)
             {
+                if (checkSame(temp_body,originalBody,head))
+                {
+                    return false;
+                }
                 originalBody=deepCopy_body(temp_body);
                 return true;
             }
@@ -235,31 +260,23 @@ public class CQMinimizer {
         }
         return false;
     }
-    /**
-     * This method is used to modifiy the target body, if a specific homomorphism is applied. For example if the original body is: R(x,y), R(x,3).
-     * If a homomorphism y -> 3 applies to this body, then the target body will be modified to R(x,3), R(x,3)
-     * @param body Input a body, which will be modified
-     * @param target The target is the map from term. In the previous case the target is y
-     * @param set_value The set_value is the map to term. In the previous case the map to element is 3
-     * @return return a modified body
-     */
-    public static List<Atom> Set_body(List<Atom> body, String target, Term set_value)
+    public static RelationalAtom setAtom (RelationalAtom targetAtom, List<Term> mapFromList,List<Term> mapToList)
     {
-        for (int i =0; i<body.size();i++)
+        for(int i=0;i< targetAtom.getTerms().size();i++)
         {
-            RelationalAtom cur_atom = (RelationalAtom) body.get(i);
-            List<String> check_contain_term = Is_contain_term(target,cur_atom);
-            if(check_contain_term.get(0).equals("true"))
+            Term curTerm=targetAtom.getTerms().get(i);
+            for (int key=0;key<mapFromList.size();key++)
             {
-                int index=Integer.parseInt(check_contain_term.get(1));
-                ((RelationalAtom) body.get(i)).getTerms().set(index,set_value);
+                Term mapFrom =mapFromList.get(key);
+                Term mapTo = mapToList.get(key);
+                if (curTerm.equals(mapFrom))
+                {
+                    targetAtom.getTerms().set(i,mapTo);
+                }
             }
         }
-        List<Atom> new_body= new ArrayList<>();
-        new_body=body;
-        return new_body;
+        return targetAtom;
     }
-
 
     /**
      * This method is used to check a target relational atom is in the original body. In this method it will use the overrie equals method of relational atom
@@ -352,8 +369,8 @@ public class CQMinimizer {
                 //Rule 1: if the two terms are both variables that are not distinguished, we follow the single direction rule: from atom1 -> atom2
                 if (!IsDistinguished_1 && !IsDistinguished_2 && Isvariable_1 && Isvariable_2)
                 {
-                        result.put(term1,term2);
-                        cnt++;
+                    result.put(term1,term2);
+                    cnt++;
                 }
                 // Rule 2 : If one of the terms is constant and the other one is a variable that is not distinguished
                 else if (!IsDistinguished_1 && Isvariable_1 && Isconstant_2)
@@ -390,7 +407,7 @@ public class CQMinimizer {
             }
             else
             {
-               return null;
+                return null;
             }
         }
     }

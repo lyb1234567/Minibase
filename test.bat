@@ -15,4 +15,5 @@ java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQ
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query13.txt data/minimization/output/query13.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query14.txt data/minimization/output/query14.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query15.txt data/minimization/output/query15.txt
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query16.txt data/minimization/output/query16.txt
 python diff.py

@@ -3,13 +3,11 @@ def compare(lst1,lst2):
     if len(lst1)!=len(lst2):
         return False
     else:
-        cnt=1
         for R in lst1:
+
             if R in lst2:
-                cnt=cnt+1
                 continue
             else:
-                print("wrong at query{0}.txt".format(cnt))
                 return False
         return True
 
@@ -44,7 +42,11 @@ for i in range(count_expected_output):
         expected_output = f.readline().strip()
         lst_expected_output=expected_output.split(':-')[1:][0].split(',')
     
-    print(compare(lst_expected_output,lst_output))
+    check=compare(lst_expected_output,lst_output)
+    if check:
+        print("query{0}.txt is correct".format(i+1))
+    else:
+        print("query{0}.txt is wrong".format(i+1))
 
 
 
