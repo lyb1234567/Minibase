@@ -67,38 +67,15 @@ public class UltsForEvaluator {
         }
     }
 
-    public static boolean checkSingleRelationAtoms(ComparisonAtom comparisonAtom,List<RelationalAtom>relationalAtomList)
-    {
-        Term term1=comparisonAtom.getTerm1();
-        Term term2=comparisonAtom.getTerm2();
-        int checkNum=0;
-        if (term1 instanceof  Variable)
-        {
-            checkNum++;
-        }
-        if (term2 instanceof  Variable)
-        {
-            checkNum++;
-        }
-        if (checkNum == 0 || checkNum == 1) return true;
-
-        for(RelationalAtom relationalAtom : relationalAtomList)
-        {
-             boolean checkOnlyOneTerm = checkRelationSingleComparisonAtom(relationalAtom,term1,term2);
-             if(!checkOnlyOneTerm)
-             {
-                 return false;
-             }
-        }
-        return true;
-    }
 
     public static  boolean checkRelationSingleComparisonAtom(RelationalAtom relationalAtom,Term term1, Term term2)
     {
         boolean hasOnlyOneTerm = true;
         for (Term term : relationalAtom.getTerms()) {
-            if (term.equals(term1) || term.equals(term2)) {
-                if (!hasOnlyOneTerm) {
+            if (term.equals(term1) || term.equals(term2))
+            {
+                if (!hasOnlyOneTerm)
+                {
                     return false;
                 }
                 hasOnlyOneTerm = false;

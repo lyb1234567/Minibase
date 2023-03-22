@@ -58,7 +58,6 @@ public class JoinOperator extends Operator {
             }
         }
 
-
         outerTuple=leftChidOperator.getNextTuple();
         while ((outerTuple != null) ){
             rightChildOperator.reset();
@@ -156,7 +155,7 @@ public class JoinOperator extends Operator {
      */
     public static  boolean passSinglePredicate(Tuple leftTuple, Tuple rightTuple, ComparisonAtom predicate, List<RelationalAtom> leftChildAtoms, RelationalAtom rightChildAtom)
     {
-        boolean checkSingleAtomSelection = UltsForEvaluator.checkSingleRelationAtoms(predicate,leftChildAtoms);
+        boolean checkSingleAtomSelection = QueryPlanner.checkSingleRelationAtoms(predicate,leftChildAtoms);
         if (!checkSingleAtomSelection)
         {
             throw new IllegalArgumentException("For each single predicate, each relational atom should have only one varibale");
@@ -193,15 +192,13 @@ public class JoinOperator extends Operator {
               // Check the substitude constant based on right relational atom is equal to that based on the left relational atim
               if (rightSubConstant1!=null)
               {
-                  for(Constant leftConstant:leftSubConstants1)
-                  {
-                      System.out.println("left:"+leftConstant);
-                      System.out.println("right:"+rightSubConstant1);
-                      if (!leftConstant.equals(rightSubConstant1))
-                      {
-                          throw new IllegalArgumentException(" The Substitution constant form the right relationAtom should be the same as that from the left child relationAtom");
-                      }
-                  }
+//                  for(Constant leftConstant:leftSubConstants1)
+//                  {
+//                      if (!leftConstant.equals(rightSubConstant1))
+//                      {
+//                          throw new IllegalArgumentException(" The Substitution constant form the right relationAtom should be the same as that from the left child relationAtom");
+//                      }
+//                  }
                   subTerm1 = rightSubConstant1;
               }
               else if (rightSubConstant1 == null)

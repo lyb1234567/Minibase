@@ -4,6 +4,7 @@ import ed.inf.adbs.minibase.dbStructure.Schema;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 import ed.inf.adbs.minibase.evaluator.JoinOperator;
 import ed.inf.adbs.minibase.evaluator.ScanOperator;
+import ed.inf.adbs.minibase.evaluator.SelectionOperator;
 import ed.inf.adbs.minibase.parser.QueryParser;
 import org.junit.Test;
 
@@ -37,6 +38,8 @@ public class JoinOperatorTests {
     private  IntegerConstant integerConstant13= new IntegerConstant(13);
     private  IntegerConstant integerConstant14= new IntegerConstant(14);
     private  IntegerConstant integerConstant5= new IntegerConstant(5);
+
+    private  IntegerConstant integerConstant2= new IntegerConstant(2);
 
 
     // Used String Constants
@@ -110,6 +113,10 @@ public class JoinOperatorTests {
     private  final ComparisonAtom comparisonAtom2 = new ComparisonAtom(variablex,stringConstant2,ComparisonOperator.EQ);
     private  final ComparisonAtom comparisonAtom3 = new ComparisonAtom(variablex,stringConstant3,ComparisonOperator.LT);
     private  final ComparisonAtom comparisonAtom4 = new ComparisonAtom(variablex,stringConstant4,ComparisonOperator.LEQ);
+
+    private  final ComparisonAtom comparisonAtom5 = new ComparisonAtom(variabley,integerConstant2,ComparisonOperator.GT);
+
+
     @Test
     public void testpassesSelectionPredicatesRelationalAtomLists() throws IOException {
         Query query1 = QueryParser.parse("Q(x,y,z) :- R(x, y, z)");
@@ -145,15 +152,22 @@ public class JoinOperatorTests {
         ComparisonAtom testComparison=new ComparisonAtom(variablex,integerConstant5,ComparisonOperator.GT);
         List<RelationalAtom> leftRelationalAtoms=new ArrayList<>();
         leftRelationalAtoms.add(relationalAtom1);
+
         List<ComparisonAtom>comparisonAtoms=new ArrayList<ComparisonAtom>();
         // Left Combined Tuples: 1, 9, 'adbs', 1, 1
         // Right Tuple: 1,1
         // Left RelationalAtoms: [R(x, y, z), T(x, r)]
         // Right RelationalAtom: S(a, b, c)
 //        assertTrue(JoinOperator.passesSelectionPredicatesRelationalAtomLists(leftTuple,rightTuple,leftRelationalAtoms,rightRelationAtom,comparisonAtoms));
+        comparisonAtoms.add(comparisonAtom5);
+        System.out.println(scanOperator_1.getRelationalAtom());
+        System.out.println(scanOperator_2.getRelationalAtom());
+        SelectionOperator selectionOperator_1 = new SelectionOperator(relationalAtom1,scanOperator_1,comparisonAtoms);
+        SelectionOperator selectionOperator_2 = new SelectionOperator(relationalAtom2,scanOperator_2,comparisonAtoms);
+        comparisonAtoms.remove(comparisonAtom5);
+        JoinOperator joinOperator= new JoinOperator(selectionOperator_1,selectionOperator_2,leftRelationalAtoms,relationalAtom2,comparisonAtoms);
+        joinOperator.dump("crossProductTest3","join","txt");
         System.out.println(comparisonAtoms);
-        JoinOperator joinOperator= new JoinOperator(scanOperator_1,scanOperator_2,leftRelationalAtoms,relationalAtom2,comparisonAtoms);
-        joinOperator.dump("crossProductTest","join","txt");
 
     }
 

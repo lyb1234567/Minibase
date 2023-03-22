@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 
 public class ProjectionOperator extends Operator{
+
     /**
      * It will first get next tuple form its child operator(it can be scanOperator or Select Operator, which is determined if there is a predicate or not)
      * If the next tuple from the child operator is null, which means it reaches the end.
