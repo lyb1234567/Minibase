@@ -31,6 +31,9 @@ public class UltsForEvaluator {
 
         if(checkNum!=combinedTuples.getFields().size())
         {
+            System.out.println(combinedTuples.getFields());
+            System.out.println(checkNum);
+            System.out.println(relationalAtomList);
             throw new IllegalArgumentException("The total number of terms form the relationAtom list does not match the number of constants of combined tuples");
         }
         int offset=0;

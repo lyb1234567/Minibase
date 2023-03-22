@@ -100,29 +100,36 @@ public class QueryPlanner extends Operator{
         JoinOperator curJoinOperator = new JoinOperator(first,second,leftRelationAtoms,rightRelationalAtom,DefaultPredicate);
 
         // after combining them together, then add the right relationalAtom to the left
-
-        leftRelationAtoms.add(rightRelationalAtom);
-
+        List<RelationalAtom> TempLeftRelational = deepCopyRelationalAtomList(leftRelationAtoms);
+        TempLeftRelational.add(rightRelationalAtom);
         while(combinedOperatorList.size()!=0)
         {
-            Operator rightChilOperator= combinedOperatorList.remove(0);
+            Operator rightChild = combinedOperatorList.remove(0);
 
-            List<RelationalAtom> tempLeftRelationAtoms = new ArrayList<>(leftRelationAtoms);
-            RelationalAtom rightChildAtom = extractRelationalAtomOperator(rightChilOperator);
-            List<ComparisonAtom> curpredicate = joinConditionMap.getOrDefault(rightChildAtom,new ArrayList<>());
+            rightRelationalAtom = extractRelationalAtomOperator(rightChild);
 
-            curJoinOperator=new JoinOperator(curJoinOperator,rightChilOperator,tempLeftRelationAtoms,rightChildAtom,curpredicate);
+            curJoinOperator = new JoinOperator(curJoinOperator, rightChild, new ArrayList<>(TempLeftRelational), rightRelationalAtom, joinConditionMap.getOrDefault(rightRelationalAtom, new ArrayList<>()));
 
-            leftRelationAtoms.add(rightChildAtom);
+            TempLeftRelational= deepCopyRelationalAtomList(TempLeftRelational);
+            TempLeftRelational.add(rightRelationalAtom);
         }
-
         // Construct the final projectionOperator for setting root.
-        ProjectionOperator finalProjectionOperator = new ProjectionOperator(curJoinOperator,extractVaribaleHead(this.inputQuery.getHead()),leftRelationAtoms);
+        ProjectionOperator finalProjectionOperator = new ProjectionOperator(curJoinOperator,extractVaribaleHead(this.inputQuery.getHead()),TempLeftRelational);
         this.root = finalProjectionOperator;
         return;
     }
 
 
+    public List<RelationalAtom> deepCopyRelationalAtomList(List<RelationalAtom>leftRelationAtoms)
+    {
+        List<RelationalAtom> temp =new ArrayList<>();
+        for(RelationalAtom relationalAtom : leftRelationAtoms)
+        {
+            RelationalAtom copy = relationalAtom.deepcopy();
+            temp.add(copy);
+        }
+        return temp;
+    }
     /**
      * This method is used to get the last relationalAtom, that can by applied by the corresponding join condition.
      * For exmaple in this case : In the case of R(x,y,z) S(x,w,t), T(m,r), [x>t,m>r], this method will return a map: {S(x,w,t)=x>t,T(m,r)=m>2}

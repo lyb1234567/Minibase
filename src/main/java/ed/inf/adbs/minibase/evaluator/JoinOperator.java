@@ -11,6 +11,62 @@ public class JoinOperator extends Operator {
     Operator leftChidOperator;
     Operator rightChildOperator;
 
+    public Operator getLeftChidOperator() {
+        return leftChidOperator;
+    }
+
+    public void setLeftChidOperator(Operator leftChidOperator) {
+        this.leftChidOperator = leftChidOperator;
+    }
+
+    public Operator getRightChildOperator() {
+        return rightChildOperator;
+    }
+
+    public void setRightChildOperator(Operator rightChildOperator) {
+        this.rightChildOperator = rightChildOperator;
+    }
+
+    public List<RelationalAtom> getLeftChildRelationAtoms() {
+        return leftChildRelationAtoms;
+    }
+
+    public void setLeftChildRelationAtoms(List<RelationalAtom> leftChildRelationAtoms) {
+        this.leftChildRelationAtoms = leftChildRelationAtoms;
+    }
+
+    public RelationalAtom getRightChildRelationAtom() {
+        return rightChildRelationAtom;
+    }
+
+    public void setRightChildRelationAtom(RelationalAtom rightChildRelationAtom) {
+        this.rightChildRelationAtom = rightChildRelationAtom;
+    }
+
+    public List<ComparisonAtom> getPredicates() {
+        return Predicates;
+    }
+
+    public void setPredicates(List<ComparisonAtom> predicates) {
+        Predicates = predicates;
+    }
+
+    public Tuple getOuterTuple() {
+        return outerTuple;
+    }
+
+    public void setOuterTuple(Tuple outerTuple) {
+        this.outerTuple = outerTuple;
+    }
+
+    public Tuple getInnerTuple() {
+        return innerTuple;
+    }
+
+    public void setInnerTuple(Tuple innerTuple) {
+        this.innerTuple = innerTuple;
+    }
+
     List<RelationalAtom> leftChildRelationAtoms;
 
     RelationalAtom rightChildRelationAtom;
