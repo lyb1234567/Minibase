@@ -1,5 +1,6 @@
 package ed.inf.adbs.minibase.evaluator;
 
+//import com.sun.tools.javac.util.RichDiagnosticFormatter;
 import ed.inf.adbs.minibase.base.*;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 
@@ -211,11 +212,6 @@ public class JoinOperator extends Operator {
      */
     public static  boolean passSinglePredicate(Tuple leftTuple, Tuple rightTuple, ComparisonAtom predicate, List<RelationalAtom> leftChildAtoms, RelationalAtom rightChildAtom)
     {
-        boolean checkSingleAtomSelection = QueryPlanner.checkSingleRelationAtoms(predicate,leftChildAtoms);
-        if (!checkSingleAtomSelection)
-        {
-            throw new IllegalArgumentException("For each single predicate, each relational atom should have only one varibale");
-        }
         ComparisonAtom comparisonAtomConstantSubstitudeVariable = subFromLeftandRight(predicate,leftTuple,rightTuple,leftChildAtoms,rightChildAtom);
         Constant constant1=(Constant) comparisonAtomConstantSubstitudeVariable.getTerm1();
         Constant constant2=(Constant) comparisonAtomConstantSubstitudeVariable.getTerm2();
@@ -248,13 +244,6 @@ public class JoinOperator extends Operator {
               // Check the substitude constant based on right relational atom is equal to that based on the left relational atim
               if (rightSubConstant1!=null)
               {
-//                  for(Constant leftConstant:leftSubConstants1)
-//                  {
-//                      if (!leftConstant.equals(rightSubConstant1))
-//                      {
-//                          throw new IllegalArgumentException(" The Substitution constant form the right relationAtom should be the same as that from the left child relationAtom");
-//                      }
-//                  }
                   subTerm1 = rightSubConstant1;
               }
               else if (rightSubConstant1 == null)
@@ -289,13 +278,6 @@ public class JoinOperator extends Operator {
             // Check the substitude constant based on right relational atom is equal to that based on the left relational atim
             if (rightSubConstant2!=null)
             {
-                for(Constant leftConstant:leftSubConstants2)
-                {
-                    if (!leftConstant.equals(rightSubConstant2))
-                    {
-                        throw new IllegalArgumentException(" The Substitution constant form the right relationAtom should be the same as that from the left child relationAtom");
-                    }
-                }
                 subTerm2 = rightSubConstant2;
             }
             else if (rightSubConstant2 == null)

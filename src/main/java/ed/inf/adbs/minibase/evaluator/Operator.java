@@ -2,6 +2,7 @@ package ed.inf.adbs.minibase.evaluator;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 
 import java.io.*;
+import java.util.stream.Collectors;
 
 public abstract class Operator {
     /**
@@ -31,19 +32,7 @@ public abstract class Operator {
             PrintStream out = new PrintStream(fileName);
             while (nextTuple !=null)
             {
-                System.out.println("Current Tuple:"+nextTuple.getFields());
-                String result="";
-                for(int i=0;i<nextTuple.getFields().size();i++)
-                {
-                    if( i == nextTuple.getFields().size()-1)
-                    {
-                        result=result+" "+nextTuple.getFields().get(i);
-                    }
-                    else
-                    {
-                        result=result+" "+nextTuple.getFields().get(i)+",";
-                    }
-                }
+                String result=nextTuple.getFields().stream().map(Object::toString).collect(Collectors.joining(", "));
                 out.println(result);
                 nextTuple=getNextTuple();
             }

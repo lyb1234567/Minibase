@@ -83,7 +83,7 @@ public class QueryPlanner extends Operator{
 
         // get the joinConditionMap, which can be used to get the last relationAtom that can be applied by the comparisonAtom list
         HashMap<RelationalAtom,List<ComparisonAtom>> joinConditionMap = constructJoinConditionMap(joinConditions,scanOperatorList);
-
+        System.out.println("JoinConditionMap:"+joinConditionMap);
 
         // construct the leftRelationAtoms for join Operator
 
@@ -110,6 +110,7 @@ public class QueryPlanner extends Operator{
 
             curJoinOperator = new JoinOperator(curJoinOperator, rightChild, new ArrayList<>(TempLeftRelational), rightRelationalAtom, joinConditionMap.getOrDefault(rightRelationalAtom, new ArrayList<>()));
 
+            // Deep copy the tempLeftRelational
             TempLeftRelational= deepCopyRelationalAtomList(TempLeftRelational);
             TempLeftRelational.add(rightRelationalAtom);
         }
@@ -120,6 +121,11 @@ public class QueryPlanner extends Operator{
     }
 
 
+    /**
+     * This method is used to deep copy a list of relational atoms, which is necessary when the previous leftrealtional atoms are changed
+     * @param leftRelationAtoms
+     * @return
+     */
     public List<RelationalAtom> deepCopyRelationalAtomList(List<RelationalAtom>leftRelationAtoms)
     {
         List<RelationalAtom> temp =new ArrayList<>();
@@ -465,6 +471,11 @@ public class QueryPlanner extends Operator{
         }
     }
 
+
+    /**
+     * Construct a list of scan operators, by using existing relational Lists.
+     * @throws FileNotFoundException
+     */
     public void setScanOpeartorList() throws FileNotFoundException {
         List<ScanOperator> scanOperatorList = new ArrayList<>();
         for( RelationalAtom relationalAtom : this.relationalAtomList )
@@ -579,7 +590,7 @@ public class QueryPlanner extends Operator{
 
     @Override
     public Tuple getNextTuple() throws IOException {
-        return null;
+        return this.root.getNextTuple();
     }
 
     @Override
