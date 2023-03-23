@@ -4,8 +4,12 @@ import ed.inf.adbs.minibase.base.Atom;
 import ed.inf.adbs.minibase.base.Query;
 import ed.inf.adbs.minibase.base.Head;
 import ed.inf.adbs.minibase.dbStructure.DatabaseCatalog;
+import ed.inf.adbs.minibase.evaluator.QueryPlanner;
+import ed.inf.adbs.minibase.evaluator.TopInterpreter;
+import ed.inf.adbs.minibase.evaluator.UltsForEvaluator;
 import ed.inf.adbs.minibase.parser.QueryParser;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -15,7 +19,7 @@ import java.util.List;
  */
 public class Minibase {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         if (args.length != 3) {
             System.err.println("Usage: Minibase database_dir input_file output_file");
@@ -27,21 +31,21 @@ public class Minibase {
         String outputFile = args[2];
 
 
-//        evaluateCQ(databaseDir, inputFile, outputFile);
+        evaluateCQ(databaseDir, inputFile, outputFile);
 
         parsingExample(inputFile);
     }
 
-    public static void evaluateCQ(String databaseDir, String inputFile, String outputFile) {
-        // TODO: add your implementation
+    public static void evaluateCQ(String databaseDir, String inputFile, String outputFile) throws IOException {
 
+        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+        String queryNumber = UltsForEvaluator.getqueryNumber(inputFile);
+        QueryPlanner queryPlanner =new QueryPlanner(inputQuery,databaseDir);
+        TopInterpreter topInterpreter = new TopInterpreter(queryPlanner);
+        topInterpreter.dump(queryNumber,outputFile,".csv");
     }
 
-    /**
-     * Example method for getting started with the parser.
-     * Reads CQ from a file and prints it to screen, then extracts Head and Body
-     * from the query and prints them to screen.
-     */
+
 
     public static void parsingExample(String filename) {
         try {

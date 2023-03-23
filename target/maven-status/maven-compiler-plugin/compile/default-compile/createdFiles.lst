@@ -25,6 +25,7 @@ ed\inf\adbs\minibase\dbStructure\Relation.class
 ed\inf\adbs\minibase\Minibase.class
 ed\inf\adbs\minibase\parser\generated\MinibaseVisitor.class
 ed\inf\adbs\minibase\evaluator\SelectionOperator.class
+ed\inf\adbs\minibase\evaluator\TopInterpreter.class
 ed\inf\adbs\minibase\CQMinimizer.class
 ed\inf\adbs\minibase\dbStructure\DatabaseCatalog.class
 ed\inf\adbs\minibase\parser\QueryParser.class

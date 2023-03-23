@@ -136,11 +136,17 @@ public class ProjectionOperator extends Operator{
          }
 
     }
+
+    @Override
+    public String toString() {
+        return "Projection ( " + this.getChildOperator().toString()+")";
+    }
+
     /*
-    This method is used get the total number of terms from the relationalatom list.
-    For example: if we have relational list: R(x, y, z), S(x, w, t), T(x, r), in this case the number of terms form this relationAtom list is 6
-    And if we only have single relational list: R(x,y,z), then the number of terms from this single relationAtom is 3.
-     */
+        This method is used get the total number of terms from the relationalatom list.
+        For example: if we have relational list: R(x, y, z), S(x, w, t), T(x, r), in this case the number of terms form this relationAtom list is 6
+        And if we only have single relational list: R(x,y,z), then the number of terms from this single relationAtom is 3.
+         */
     public int getNumberFromRelationAtom()
     {
         if (this.relationalAtomList==null)

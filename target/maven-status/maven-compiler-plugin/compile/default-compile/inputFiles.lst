@@ -6,6 +6,7 @@ C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\ComparisonOperat
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseListener.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\dbStructure\Tuple.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseBaseListener.java
+C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\evaluator\TopInterpreter.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\evaluator\QueryPlanner.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\evaluator\ScanOperator.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseVisitor.java

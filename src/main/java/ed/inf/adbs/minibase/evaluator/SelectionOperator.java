@@ -224,12 +224,7 @@ public class SelectionOperator extends Operator {
             }
 
         }
-        // Else throw an exception
-        else
-        {
-            throw new IllegalArgumentException("Comparison atom is not contained in the corresponding relation Atom!!!");
-        }
-
+        return false;
     }
 
     /**
@@ -265,6 +260,12 @@ public class SelectionOperator extends Operator {
         {
             return (operator.equals(ComparisonOperator.LEQ) || operator.equals(ComparisonOperator.LT));
         }
+    }
+
+    @Override
+    public String toString() {
+        Operator child = this.getChildOperator();
+        return " Selection ( " + child.toString() + ", Conditions:"+this.Predicates+ " )";
     }
 
     /**

@@ -125,7 +125,6 @@ public class ScanOperator extends Operator{
         {
             return null;
         }
-
     }
 
 
@@ -175,4 +174,8 @@ public class ScanOperator extends Operator{
         return (isFile && isCsv && relationName.equals(schema.getName()) && isContainedFiles);
     }
 
+    @Override
+    public String toString() {
+        return "Scan ( "+ this.getRelationalAtom()+" )";
+    }
 }

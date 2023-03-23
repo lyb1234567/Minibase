@@ -87,6 +87,7 @@ public class JoinOperator extends Operator {
         this.innerTuple = null;
     }
 
+
     /**
      * This getNextTuple() method returns the next tuple, which passes all the join conditions cross all the relationalAtoms.
      * For each outer tuple, this method will  try to find a matched innertuple by iterating through the right childAtom's tuple. So, for each line of left tuple, it will first
@@ -155,15 +156,11 @@ public class JoinOperator extends Operator {
      * @param joinConditions condition for join operation.
      * @return return a boolean to check if can all the join operation.
      */
-
     public static boolean passesSelectionPredicatesRelationalAtomLists(Tuple leftTuple, Tuple rightTuple, List<RelationalAtom> leftChildAtoms, RelationalAtom rightChildAtom, List<ComparisonAtom> joinConditions)
     {
         boolean sameNameVariableNotEqual = false;
         for (Term term : rightChildAtom.getTerms())
         {
-            if (term instanceof Constant) {
-                throw new IllegalArgumentException("Shouldn't be getting constants embedded in relational atoms at this stage!");
-            }
             if (term instanceof Variable)
             {
                 Variable var = (Variable) term;
@@ -303,6 +300,12 @@ public class JoinOperator extends Operator {
         return new ComparisonAtom(subTerm1,subTerm2,predicate.getOp());
     }
 
+    @Override
+    public String toString() {
+        Operator leftChild =this.getLeftChidOperator();
+        Operator rightChild = this.getRightChildOperator();
+        return "Join ( "+ "Left : "+ leftChild.toString() +" Right : "+rightChild.toString()+" )";
+    }
 }
 
 

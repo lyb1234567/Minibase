@@ -3,6 +3,7 @@ package ed.inf.adbs.minibase.evaluator;
 import ed.inf.adbs.minibase.base.*;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class UltsForEvaluator {
      */
     public static List<Constant> substitutionForVariableinRelationAtom (Tuple combinedTuples, Variable variable, List<RelationalAtom> relationalAtomList)
     {
+
          // First we need to check the number of the terms in the relationalAtom list should match the number of constants form the combined tuple
         int checkNum=0;
         for(RelationalAtom relationalAtom : relationalAtomList)
@@ -31,9 +33,6 @@ public class UltsForEvaluator {
 
         if(checkNum!=combinedTuples.getFields().size())
         {
-            System.out.println(combinedTuples.getFields());
-            System.out.println(checkNum);
-            System.out.println(relationalAtomList);
             throw new IllegalArgumentException("The total number of terms form the relationAtom list does not match the number of constants of combined tuples");
         }
         int offset=0;
@@ -53,6 +52,14 @@ public class UltsForEvaluator {
     }
 
 
+    /**
+     * This method is used to get a corresponding constant mapping a specific variable to tuple. For example, R(x,y,z) and a corresponding tuple is (1,2,3), then if this
+     * method takes x,then it will return 1.
+     * @param relationalAtom a relation atom which can be used to map varibale to corresponding tuple
+     * @param tuple a list of constants which can be used to map the corresponding atom
+     * @param variable a variable from a corresponding relational atom
+     * @return return corresponding constant mapped form tuple and relational
+     */
     public static Constant getConstantFromSingleRelationalAtom(RelationalAtom relationalAtom,Tuple tuple,Variable variable)
     {
         if (relationalAtom.getTerms().size()!=tuple.getFields().size())
@@ -71,6 +78,13 @@ public class UltsForEvaluator {
     }
 
 
+    /**
+     * This method is used to check a specific relationalAtom contain only one term
+     * @param relationalAtom a specific relational Atom for comparing
+     * @param term1 term1 from comparison
+     * @param term2 term2 from comparison
+     * @return return a boolean to check
+     */
     public static  boolean checkRelationSingleComparisonAtom(RelationalAtom relationalAtom,Term term1, Term term2)
     {
         boolean hasOnlyOneTerm = true;
@@ -87,6 +101,14 @@ public class UltsForEvaluator {
         return !hasOnlyOneTerm;
     }
 
+
+    /**
+     * This method is used to compare two constants like 1>3 or "string" < "ABC" by using compare To method.
+     * @param constant1 the first constant
+     * @param constant2 the second constant
+     * @param operator comparison operator like EQ NEQ GT
+     * @return return boolean to check if the predicate can pass
+     */
     public static boolean compareConstants(Constant constant1, Constant constant2, ComparisonOperator operator) {
         if (operator.equals(ComparisonOperator.EQ)) {
             return constant1.equals(constant2);
@@ -114,6 +136,12 @@ public class UltsForEvaluator {
         }
     }
 
+    /**
+     * This method is used to check the compareTo value of two constants.
+     * @param constant1 the first constant of comparison
+     * @param constant2 the second constant of comparison
+     * @return return a int value of  comparto of two different constants
+     */
     public static int checkConstantComparison(Constant constant1, Constant constant2) {
         if (!constant1.getClass().equals(constant2.getClass())) {
             throw new IllegalArgumentException("The class of the constants have to be the same");
@@ -134,4 +162,75 @@ public class UltsForEvaluator {
             return Integer.MAX_VALUE;
         }
     }
+
+    /**
+
+     Returns the absolute file path of a CSV file in a specified directory,
+     with a specified name.
+     @param folderPath the absolute path of the directory containing the CSV file
+     @param relationalName the name of the CSV file without the file extension
+     @return the absolute file path of the CSV file, or null if it cannot be found
+     */
+    public static String csvFilePathGet(String folderPath,String relationalName)
+    {
+        String target=relationalName+".csv";
+        folderPath=folderPath+File.separator+"files";
+        File folder = new File(folderPath);
+        File[] listOfFiles = folder.listFiles();
+        assert listOfFiles != null;
+        for (File file : listOfFiles)
+        {
+            if (file.isFile())
+            {
+                String filePath= file.getAbsolutePath();
+                if(filePath.contains(target))
+                {
+                    return filePath;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+
+     Returns the query number from a file path by extracting the substring between the last
+     occurrence of "/" and "." in the path.
+     @param path the file path containing the query number
+     @return the query number extracted from the file path
+     */
+    public static String getqueryNumber(String path)
+    {
+        int startIndex = path.lastIndexOf("/") + 1; // Find the index of the last occurrence of "/"
+        int endIndex = path.lastIndexOf("."); // Find the index of the last occurrence of "."
+        String query = path.substring(startIndex, endIndex);
+        return query;
+    }
+
+
+    /**
+
+     Returns the absolute file path of a "schema.txt" file located in the specified directory.
+     @param dbDir the absolute path of the directory containing the "schema.txt" file
+     @return the absolute file path of the "schema.txt" file, or null if it cannot be found
+     */
+    public static  String getschemaPath(String dbDir)
+    {
+        File folder = new File(dbDir);
+        File[] listOfFiles = folder.listFiles();
+        assert listOfFiles != null;
+        for (File file : listOfFiles)
+        {
+            if (file.isFile())
+            {
+                String filePath= file.getAbsolutePath();
+                if(filePath.contains("schema.txt"))
+                {
+                    return filePath;
+                }
+            }
+        }
+        return null;
+    }
+
 }

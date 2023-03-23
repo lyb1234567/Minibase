@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 public class QueryPlanner extends Operator{
+
+
+    private  String dbDir;
     private  Query inputQuery;
     private  Operator root;
 
@@ -27,19 +30,25 @@ public class QueryPlanner extends Operator{
     private List<RelationalAtom>relationalAtomList=new ArrayList<>();
     private List<ComparisonAtom> comparisonAtomList = new ArrayList<>();
 
-    private  String fileNameR="."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"files"+File.separator+"R.csv";
+    private  String fileNameR;
 
-    private  String fileNameS="."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"files"+File.separator+"S.csv";
-    private  String fileNameT="."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"files"+File.separator+"T.csv";
+    private  String fileNameS;
+    private  String fileNameT;
 
-    private  String schemaFilePath = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"schema.txt";
+    private  String schemaFilePath;
 
-    public QueryPlanner(Query inputQuery) throws IOException {
+    public QueryPlanner(Query inputQuery,String dbDir) throws IOException {
         this.inputQuery = inputQuery;
-        databaseCatalog.constructSchemaMap(schemaFilePath);
+        this.dbDir=dbDir;
+        this.schemaFilePath = UltsForEvaluator.getschemaPath(dbDir);
+        databaseCatalog.constructSchemaMap(this.schemaFilePath);
         this.SchemaMap = databaseCatalog.getSchemaMap();
+        this.fileNameR=UltsForEvaluator.csvFilePathGet(this.dbDir,"R");
+        this.fileNameS=UltsForEvaluator.csvFilePathGet(this.dbDir,"S");
+        this.fileNameT=UltsForEvaluator.csvFilePathGet(this.dbDir,"T");
         initializeRelationalAtomListComparisonList();
         setScanOpeartorList();
+        constructTree();
     }
 
 
@@ -55,7 +64,6 @@ public class QueryPlanner extends Operator{
 
         // Set Hash map, which can map each comparison atom to each corresponding scan oprator list
         HashMap<ScanOperator,List<ComparisonAtom>> scanOperatorSingleSelectionMap = getRelevantScanOperatorMap(directCondition,scanOperatorList);
-
 
         // Set combined selection and scan operator list
         List<Operator> combinedOperatorList = CombinScanSelectionOperator(scanOperatorList,scanOperatorSingleSelectionMap);
@@ -83,7 +91,6 @@ public class QueryPlanner extends Operator{
 
         // get the joinConditionMap, which can be used to get the last relationAtom that can be applied by the comparisonAtom list
         HashMap<RelationalAtom,List<ComparisonAtom>> joinConditionMap = constructJoinConditionMap(joinConditions,scanOperatorList);
-        System.out.println("JoinConditionMap:"+joinConditionMap);
 
         // construct the leftRelationAtoms for join Operator
 
@@ -136,6 +143,13 @@ public class QueryPlanner extends Operator{
         }
         return temp;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.root.toString();
+    }
+
     /**
      * This method is used to get the last relationalAtom, that can by applied by the corresponding join condition.
      * For exmaple in this case : In the case of R(x,y,z) S(x,w,t), T(m,r), [x>t,m>r], this method will return a map: {S(x,w,t)=x>t,T(m,r)=m>2}
@@ -232,6 +246,10 @@ public class QueryPlanner extends Operator{
                 if (relevantComparisonList.size()>0)
                 {
                     currentOperator= new SelectionOperator(scanOperator.getRelationalAtom(),scanOperator,relevantComparisonList);
+                }
+                if (scanOperator.getRelationalAtom().getTerms().stream().anyMatch(Constant.class::isInstance))
+                {
+                    currentOperator=new SelectionOperator(scanOperator.getRelationalAtom(),scanOperator,relevantComparisonList);
                 }
             }
             operatorList.add(currentOperator);
@@ -595,6 +613,5 @@ public class QueryPlanner extends Operator{
 
     @Override
     public void reset() {
-
     }
 }

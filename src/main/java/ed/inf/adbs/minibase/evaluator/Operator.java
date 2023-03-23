@@ -21,13 +21,13 @@ public abstract class Operator {
      * @param relName
      * @throws IOException
      */
-    public void dump(String relName,String underScoreName,String extension) throws IOException {
+    public void dump(String relName,String OutFile,String extension) throws IOException {
         Tuple nextTuple = getNextTuple();
         String writename = relName+"."+extension;
         // Write to a file
         try
         {
-            String fileName = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test"+"_"+underScoreName+File.separator+writename;
+            String fileName = OutFile;
             File file = new File(fileName);
             PrintStream out = new PrintStream(fileName);
             while (nextTuple !=null)
