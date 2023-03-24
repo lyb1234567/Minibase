@@ -60,4 +60,16 @@ public class SumAggregate extends Term {
         return new SumAggregate(termList);
     }
 
+    /**
+     * This method is used to if the term list form SumAggregate are all the constants;
+     * @param termList a term of list from SumAggregate
+     * @return return a boolean to check
+     */
+
+    /**
+     * This method is used to if the term list form SumAggregate are all the variable;
+     * @param termList a term of list from SumAggregate
+     * @return return a boolean to check
+     */
+
 }

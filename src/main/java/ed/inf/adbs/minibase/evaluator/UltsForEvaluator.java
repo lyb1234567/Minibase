@@ -233,4 +233,23 @@ public class UltsForEvaluator {
         return null;
     }
 
+    /**
+     * This method can be used to reduce the corresponding relationalAtom after project, which can be necessarily used after projecttion
+     * @param projectVaribales project variables from project operators
+     * @param relationalAtomList relational List from previous operator's relational Atom list
+     * @return return a reduced version of relational Atom
+     */
+    public static List<RelationalAtom> reduceRelationAtomListProjectVaribales(List<Variable>projectVaribales,List<RelationalAtom> relationalAtomList)
+    {
+        List<Term> checkVisited=new ArrayList<>();
+        for(RelationalAtom relationalAtom:relationalAtomList)
+        {
+            List<Term> termList = relationalAtom.getTerms();
+            termList.removeIf(term -> !projectVaribales.contains((Variable) term));
+            termList.removeIf(checkVisited::contains);
+            checkVisited.addAll(termList);
+        }
+        return relationalAtomList;
+    }
+
 }

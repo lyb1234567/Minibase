@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
 public class QueryPlanner extends Operator{
 
 
@@ -39,6 +41,7 @@ public class QueryPlanner extends Operator{
 
     public QueryPlanner(Query inputQuery,String dbDir) throws IOException {
         this.inputQuery = inputQuery;
+
         this.dbDir=dbDir;
         this.schemaFilePath = UltsForEvaluator.getschemaPath(dbDir);
         databaseCatalog.constructSchemaMap(this.schemaFilePath);
@@ -52,7 +55,7 @@ public class QueryPlanner extends Operator{
     }
 
 
-    public void constructTree() throws FileNotFoundException {
+    public void constructTree() throws IOException {
 
          // Set the scan operator list and predicate list
           List<ScanOperator> scanOperatorList = this.getScanOperatorList();
@@ -122,8 +125,24 @@ public class QueryPlanner extends Operator{
             TempLeftRelational.add(rightRelationalAtom);
         }
         // Construct the final projectionOperator for setting root.
-        ProjectionOperator finalProjectionOperator = new ProjectionOperator(curJoinOperator,extractVaribaleHead(this.inputQuery.getHead()),TempLeftRelational);
-        this.root = finalProjectionOperator;
+
+        SumAggregate sumAggregate = inputQuery.getHead().getSumAggregate();
+        if (sumAggregate==null)
+        {
+            ProjectionOperator finalProjectionOperator = new ProjectionOperator(curJoinOperator,extractVaribaleHead(this.inputQuery.getHead()),TempLeftRelational);
+            this.root = finalProjectionOperator;
+        }
+        else if (sumAggregate!=null)
+        {
+            List<Term> productTerms = sumAggregate.getProductTerms();
+            List<Variable> projectVaribales = extractVaribaleHead(this.inputQuery.getHead());
+            List<Variable> groupByVaribales = deepCopyVaribales(projectVaribales);
+//            List<Variable> newVariables = productTerms.stream().filter(t -> t instanceof Variable && !projectVaribales.contains(t)).map(t -> (Variable) t).collect(Collectors.toList());
+//            projectVaribales.addAll(newVariables);
+            SumOperator finalSumOperator = new SumOperator(curJoinOperator,groupByVaribales,sumAggregate);
+            ProjectionOperator finalProjectionOperator = new ProjectionOperator(finalSumOperator,projectVaribales,TempLeftRelational);
+            this.root=finalProjectionOperator;
+        }
         return;
     }
 
@@ -133,7 +152,7 @@ public class QueryPlanner extends Operator{
      * @param leftRelationAtoms
      * @return
      */
-    public List<RelationalAtom> deepCopyRelationalAtomList(List<RelationalAtom>leftRelationAtoms)
+    public static List<RelationalAtom> deepCopyRelationalAtomList(List<RelationalAtom>leftRelationAtoms)
     {
         List<RelationalAtom> temp =new ArrayList<>();
         for(RelationalAtom relationalAtom : leftRelationAtoms)
@@ -142,6 +161,16 @@ public class QueryPlanner extends Operator{
             temp.add(copy);
         }
         return temp;
+    }
+
+    public List<Variable> deepCopyVaribales(List<Variable> projectVaribales)
+    {
+        List<Variable> variables=new ArrayList<>();
+        for(Variable variable:projectVaribales)
+        {
+            variables.add(variable.deepcopy());
+        }
+        return variables;
     }
 
     @Override

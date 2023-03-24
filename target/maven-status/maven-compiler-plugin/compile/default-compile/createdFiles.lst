@@ -34,6 +34,7 @@ ed\inf\adbs\minibase\parser\generated\MinibaseBaseListener.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$RelationalAtomContext.class
 ed\inf\adbs\minibase\base\Head.class
 ed\inf\adbs\minibase\base\RelationalAtom.class
+ed\inf\adbs\minibase\evaluator\SumOperator.class
 ed\inf\adbs\minibase\base\Term.class
 ed\inf\adbs\minibase\parser\generated\MinibaseParser$SumaggContext.class
 ed\inf\adbs\minibase\dbStructure\Tuple.class

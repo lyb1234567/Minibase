@@ -113,129 +113,129 @@ public class QueryPlannerTest {
 
 
 
-    @Test
-    public void testQueryPlannerQuery1() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query1.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query1","queryPlanner","txt");
-        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query1.txt";
-        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query1.csv";
-        boolean check= TestUlits.compareFile(outputFile,Compare);
-        assertTrue(check);
-    }
-
-    @Test
-    public void testQueryPlannerQuery2() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query2.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query2","queryPlanner","txt");
-        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query2.txt";
-        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query2.csv";
-        boolean check= TestUlits.compareFile(outputFile,Compare);
-        assertTrue(check);
-    }
-
-    @Test
-    public void testQueryPlannerQuery3() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query3.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query3","queryPlanner","txt");
-        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query3.txt";
-        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query3.csv";
-        boolean check= TestUlits.compareFile(outputFile,Compare);
-        assertTrue(check);
-    }
-
-    @Test
-    public void testQueryPlannerQuery4() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query4.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query4","queryPlanner","txt");
-        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query4.txt";
-        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query4.csv";
-        boolean check= TestUlits.compareFile(outputFile,Compare);
-        assertTrue(check);
-    }
-
-    @Test
-    public void testQueryPlannerQuery5() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query5.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query5","queryPlanner","txt");
-        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query5.txt";
-        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query5.csv";
-        boolean check= TestUlits.compareFile(outputFile,Compare);
-        assertTrue(check);
-    }
-
-    @Test
-    public void testQueryPlannerQuery6() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query6.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query6","queryPlanner","txt");
-        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query6.txt";
-        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query6.csv";
-        boolean check= TestUlits.compareFile(outputFile,Compare);
-        assertTrue(check);
-    }
-
-    @Test
-    public void testQueryPlannerQuery10() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query10.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query10","queryPlanner","txt");
-    }
-
-    @Test
-    public void testQueryPlannerQuery11() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query11.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query11","queryPlanner","txt");
-    }
-
-    @Test
-    public void testQueryPlannerQuery12() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query12.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query12","queryPlanner","txt");
-    }
-
-    @Test
-    public void testQueryPlannerQuery13() throws IOException
-    {
-        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query13.txt";
-        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
-        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
-        queryPlanner.constructTree();
-        queryPlanner.dump("query13","queryPlanner","txt");
-    }
+//    @Test
+//    public void testQueryPlannerQuery1() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query1.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query1","queryPlanner","txt");
+//        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query1.txt";
+//        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query1.csv";
+//        boolean check= TestUlits.compareFile(outputFile,Compare);
+//        assertTrue(check);
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery2() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query2.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query2","queryPlanner","txt");
+//        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query2.txt";
+//        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query2.csv";
+//        boolean check= TestUlits.compareFile(outputFile,Compare);
+//        assertTrue(check);
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery3() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query3.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query3","queryPlanner","txt");
+//        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query3.txt";
+//        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query3.csv";
+//        boolean check= TestUlits.compareFile(outputFile,Compare);
+//        assertTrue(check);
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery4() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query4.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query4","queryPlanner","txt");
+//        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query4.txt";
+//        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query4.csv";
+//        boolean check= TestUlits.compareFile(outputFile,Compare);
+//        assertTrue(check);
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery5() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query5.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query5","queryPlanner","txt");
+//        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query5.txt";
+//        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query5.csv";
+//        boolean check= TestUlits.compareFile(outputFile,Compare);
+//        assertTrue(check);
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery6() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query6.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query6","queryPlanner","txt");
+//        String  outputFile="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"db"+File.separator+"test_queryPlanner"+File.separator+"query6.txt";
+//        String Compare="."+File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query6.csv";
+//        boolean check= TestUlits.compareFile(outputFile,Compare);
+//        assertTrue(check);
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery10() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query10.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query10","queryPlanner","txt");
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery11() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query11.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query11","queryPlanner","txt");
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery12() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query12.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query12","queryPlanner","txt");
+//    }
+//
+//    @Test
+//    public void testQueryPlannerQuery13() throws IOException
+//    {
+//        String inputFile = "."+File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query13.txt";
+//        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+//        QueryPlanner queryPlanner = new QueryPlanner(inputQuery);
+//        queryPlanner.constructTree();
+//        queryPlanner.dump("query13","queryPlanner","txt");
+//    }
 
 
 

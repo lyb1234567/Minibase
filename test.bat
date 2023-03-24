@@ -1,5 +1,5 @@
 @echo off
-
+echo Test Minimization:
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query1.txt data/minimization/output/query1.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query2.txt data/minimization/output/query2.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query3.txt data/minimization/output/query3.txt
@@ -16,4 +16,23 @@ java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQ
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query14.txt data/minimization/output/query14.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query15.txt data/minimization/output/query15.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query16.txt data/minimization/output/query16.txt
-python diff.py
+
+echo.&echo.
+echo Test Evaluation:
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query1.txt data/evaluation/output/query1.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query2.txt data/evaluation/output/query2.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query3.txt data/evaluation/output/query3.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query4.txt data/evaluation/output/query4.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query5.txt data/evaluation/output/query5.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query6.txt data/evaluation/output/query6.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query7.txt data/evaluation/output/query7.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query8.txt data/evaluation/output/query8.csv 
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query9.txt data/evaluation/output/query9.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query10.txt data/evaluation/output/query10.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query11.txt data/evaluation/output/query11.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query12.txt data/evaluation/output/query12.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query13.txt data/evaluation/output/query13.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query14.txt data/evaluation/output/query14.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query15.txt data/evaluation/output/query15.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query16.txt data/evaluation/output/query16.csv
+python diffMinimization.py

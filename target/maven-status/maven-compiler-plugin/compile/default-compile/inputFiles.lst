@@ -28,6 +28,7 @@ C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\Minibase.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\Query.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\IntegerConstant.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\parser\generated\MinibaseLexer.java
+C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\evaluator\SumOperator.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\base\SumAggregate.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\dbStructure\Schema.java
 C:\JavaProgram\Minibase\src\main\java\ed\inf\adbs\minibase\dbStructure\Relation.java

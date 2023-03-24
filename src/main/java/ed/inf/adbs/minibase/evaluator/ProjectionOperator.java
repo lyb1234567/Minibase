@@ -1,12 +1,10 @@
 package ed.inf.adbs.minibase.evaluator;
 
-import ed.inf.adbs.minibase.base.Constant;
-import ed.inf.adbs.minibase.base.RelationalAtom;
-import ed.inf.adbs.minibase.base.Term;
-import ed.inf.adbs.minibase.base.Variable;
+import ed.inf.adbs.minibase.base.*;
 import ed.inf.adbs.minibase.dbStructure.Tuple;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,6 +38,15 @@ public class ProjectionOperator extends Operator{
             potentialProjectionTuple  = this.getResultFromProjection(nextChildTuple);
         }
         this.tupleReported.add(potentialProjectionTuple);
+        List<Constant> key = new ArrayList<>();
+        if (this.childOperator instanceof SumOperator)
+        {
+            key.addAll(potentialProjectionTuple.getFields());
+            int Sum = ((SumOperator) this.childOperator).getGroupByHashMap().get(key);
+            Constant added = new IntegerConstant(Sum);
+            key.add(added);
+        }
+        potentialProjectionTuple=new Tuple(key);
         return potentialProjectionTuple;
     }
 
@@ -59,13 +66,14 @@ public class ProjectionOperator extends Operator{
     private List<RelationalAtom> relationalAtomList;
     private Set<Tuple> tupleReported;
 
+    private  List<RelationalAtom> reducedRelationAtomList;
+
     //  this constructor creates a projection operator projecting over tuples using only one single relationAtom. For example, Q(y) :- R(8, y, z), z != 'mlpr'
     public ProjectionOperator(Operator childOperator, List<Variable> projectionVariables, RelationalAtom relationalAtom) {
 
         this.childOperator=childOperator;
         this.projectionVariables=projectionVariables;
         this.relationalAtom=relationalAtom;
-
         this.tupleReported= new HashSet<>();
 
     }
@@ -81,6 +89,7 @@ public class ProjectionOperator extends Operator{
         int numTers= getNumberFromRelationAtom();
         if (numTers !=fieldsSize)
         {
+            System.out.println(tuple.getFields());
             throw  new UnsupportedOperationException("The size of the fields of tuple doesn't match the total number of terms in the relation atoms");
         }
         List<Constant> constantList = new ArrayList<>();
@@ -210,4 +219,5 @@ public class ProjectionOperator extends Operator{
     public void setTupleReported(Set<Tuple> tupleReported) {
         this.tupleReported = tupleReported;
     }
+
 }

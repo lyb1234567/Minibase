@@ -53,12 +53,6 @@ public class Minibase {
             // Query query = QueryParser.parse("Q(x, y) :- R(x, z), S(y, z, w), z < w");
             // Query query = QueryParser.parse("Q(SUM(x * 2 * x)) :- R(x, 'z'), S(4, z, w), 4 < 'test string' ");
 
-            System.out.println("Entire query: " + query);
-            Head head = query.getHead();
-            System.out.println("Head: " + head);
-
-            List<Atom> body = query.getBody();
-            System.out.println("Body: " + body);
         }
         catch (Exception e)
         {

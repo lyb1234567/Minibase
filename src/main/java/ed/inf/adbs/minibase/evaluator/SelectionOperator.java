@@ -250,11 +250,12 @@ public class SelectionOperator extends Operator {
         }
         if (compareResult>0)
         {
+
             return (operator.equals(ComparisonOperator.GT) || operator.equals(ComparisonOperator.GEQ));
         }
         if(compareResult==0)
         {
-            return operator.equals(ComparisonOperator.EQ);
+            return (operator.equals(ComparisonOperator.LEQ) || operator.equals(ComparisonOperator.GEQ));
         }
         else
         {
