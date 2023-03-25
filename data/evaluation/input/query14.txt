@@ -1,1 +1,1 @@
-Q(x, y, z, b, u, r) :- R(x, y, z), S(2, b, y), T(u, r), x > u
+Q(x, y, z) :-  R(x, y, z), S(u, w, t), u>10

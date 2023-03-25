@@ -45,8 +45,8 @@ public class ProjectionOperator extends Operator{
             int Sum = ((SumOperator) this.childOperator).getGroupByHashMap().get(key);
             Constant added = new IntegerConstant(Sum);
             key.add(added);
+            potentialProjectionTuple=new Tuple(key);
         }
-        potentialProjectionTuple=new Tuple(key);
         return potentialProjectionTuple;
     }
 

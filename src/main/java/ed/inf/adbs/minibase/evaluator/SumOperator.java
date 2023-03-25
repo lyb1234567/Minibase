@@ -105,7 +105,8 @@ public class SumOperator extends Operator {
                 Constant constant = extractConstVaribaleRelationalAtom(nextTuple,variable,childCombinedrelationalAtoms);
                 groupByConstantList.add(constant);
             }
-            List<Term> productTerms =this.sumAggregate.getProductTerms();
+
+            List<Term> productTerms = this.sumAggregate.getProductTerms();
             int Product =1;
             // compute the product value for one line of tuple
             for(Term productTerm : productTerms)

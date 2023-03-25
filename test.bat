@@ -16,6 +16,7 @@ java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQ
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query14.txt data/minimization/output/query14.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query15.txt data/minimization/output/query15.txt
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.CQMinimizer data/minimization/input/query16.txt data/minimization/output/query16.txt
+python diffMinimization.py
 
 echo.&echo.
 echo Test Evaluation:
@@ -35,4 +36,8 @@ java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Mi
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query14.txt data/evaluation/output/query14.csv
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query15.txt data/evaluation/output/query15.csv
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query16.txt data/evaluation/output/query16.csv
-python diffMinimization.py
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query17.txt data/evaluation/output/query17.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query18.txt data/evaluation/output/query18.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query19.txt data/evaluation/output/query19.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query20.txt data/evaluation/output/query20.csv
+python diffEvalulation.py

@@ -31,10 +31,6 @@ public class UltsForEvaluator {
             }
         }
 
-        if(checkNum!=combinedTuples.getFields().size())
-        {
-            throw new IllegalArgumentException("The total number of terms form the relationAtom list does not match the number of constants of combined tuples");
-        }
         int offset=0;
         List<Constant> constantList=new ArrayList<>();
         for(RelationalAtom relationalAtom : relationalAtomList)

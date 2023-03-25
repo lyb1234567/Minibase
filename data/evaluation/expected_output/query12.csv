@@ -1,135 +1,35 @@
-2, 7, 'anlp', 1, 'smith', 8, 1, 1
-2, 7, 'anlp', 1, 'smith', 8, 1, 3
-2, 7, 'anlp', 1, 'smith', 8, 1, 2
-2, 7, 'anlp', 2, 'anka', 2, 1, 1
-2, 7, 'anlp', 2, 'anka', 2, 1, 3
-2, 7, 'anlp', 2, 'anka', 2, 1, 2
-2, 7, 'anlp', 4, 'rhcp', 3, 1, 1
-2, 7, 'anlp', 4, 'rhcp', 3, 1, 3
-2, 7, 'anlp', 4, 'rhcp', 3, 1, 2
-2, 7, 'anlp', 5, 'bowie', 4, 1, 1
-2, 7, 'anlp', 5, 'bowie', 4, 1, 3
-2, 7, 'anlp', 5, 'bowie', 4, 1, 2
-2, 7, 'anlp', 8, 'pistols', 5, 1, 1
-2, 7, 'anlp', 8, 'pistols', 5, 1, 3
-2, 7, 'anlp', 8, 'pistols', 5, 1, 2
-4, 2, 'ids', 1, 'smith', 8, 1, 1
-4, 2, 'ids', 1, 'smith', 8, 2, 3
-4, 2, 'ids', 1, 'smith', 8, 1, 3
-4, 2, 'ids', 1, 'smith', 8, 1, 2
-4, 2, 'ids', 2, 'anka', 2, 1, 1
-4, 2, 'ids', 2, 'anka', 2, 2, 3
-4, 2, 'ids', 2, 'anka', 2, 1, 3
-4, 2, 'ids', 2, 'anka', 2, 1, 2
-4, 2, 'ids', 4, 'rhcp', 3, 1, 1
-4, 2, 'ids', 4, 'rhcp', 3, 2, 3
-4, 2, 'ids', 4, 'rhcp', 3, 1, 3
-4, 2, 'ids', 4, 'rhcp', 3, 1, 2
-4, 2, 'ids', 5, 'bowie', 4, 1, 1
-4, 2, 'ids', 5, 'bowie', 4, 2, 3
-4, 2, 'ids', 5, 'bowie', 4, 1, 3
-4, 2, 'ids', 5, 'bowie', 4, 1, 2
-4, 2, 'ids', 8, 'pistols', 5, 1, 1
-4, 2, 'ids', 8, 'pistols', 5, 2, 3
-4, 2, 'ids', 8, 'pistols', 5, 1, 3
-4, 2, 'ids', 8, 'pistols', 5, 1, 2
-5, 0, 'sdp', 1, 'smith', 8, 1, 1
-5, 0, 'sdp', 1, 'smith', 8, 2, 3
-5, 0, 'sdp', 1, 'smith', 8, 4, 5
-5, 0, 'sdp', 1, 'smith', 8, 1, 3
-5, 0, 'sdp', 1, 'smith', 8, 1, 2
-5, 0, 'sdp', 2, 'anka', 2, 1, 1
-5, 0, 'sdp', 2, 'anka', 2, 2, 3
-5, 0, 'sdp', 2, 'anka', 2, 4, 5
-5, 0, 'sdp', 2, 'anka', 2, 1, 3
-5, 0, 'sdp', 2, 'anka', 2, 1, 2
-5, 0, 'sdp', 4, 'rhcp', 3, 1, 1
-5, 0, 'sdp', 4, 'rhcp', 3, 2, 3
-5, 0, 'sdp', 4, 'rhcp', 3, 4, 5
-5, 0, 'sdp', 4, 'rhcp', 3, 1, 3
-5, 0, 'sdp', 4, 'rhcp', 3, 1, 2
-5, 0, 'sdp', 5, 'bowie', 4, 1, 1
-5, 0, 'sdp', 5, 'bowie', 4, 2, 3
-5, 0, 'sdp', 5, 'bowie', 4, 4, 5
-5, 0, 'sdp', 5, 'bowie', 4, 1, 3
-5, 0, 'sdp', 5, 'bowie', 4, 1, 2
-5, 0, 'sdp', 8, 'pistols', 5, 1, 1
-5, 0, 'sdp', 8, 'pistols', 5, 2, 3
-5, 0, 'sdp', 8, 'pistols', 5, 4, 5
-5, 0, 'sdp', 8, 'pistols', 5, 1, 3
-5, 0, 'sdp', 8, 'pistols', 5, 1, 2
-8, 1, 'mlpr', 1, 'smith', 8, 1, 1
-8, 1, 'mlpr', 1, 'smith', 8, 2, 3
-8, 1, 'mlpr', 1, 'smith', 8, 4, 5
-8, 1, 'mlpr', 1, 'smith', 8, 1, 3
-8, 1, 'mlpr', 1, 'smith', 8, 1, 2
-8, 1, 'mlpr', 2, 'anka', 2, 1, 1
-8, 1, 'mlpr', 2, 'anka', 2, 2, 3
-8, 1, 'mlpr', 2, 'anka', 2, 4, 5
-8, 1, 'mlpr', 2, 'anka', 2, 1, 3
-8, 1, 'mlpr', 2, 'anka', 2, 1, 2
-8, 1, 'mlpr', 4, 'rhcp', 3, 1, 1
-8, 1, 'mlpr', 4, 'rhcp', 3, 2, 3
-8, 1, 'mlpr', 4, 'rhcp', 3, 4, 5
-8, 1, 'mlpr', 4, 'rhcp', 3, 1, 3
-8, 1, 'mlpr', 4, 'rhcp', 3, 1, 2
-8, 1, 'mlpr', 5, 'bowie', 4, 1, 1
-8, 1, 'mlpr', 5, 'bowie', 4, 2, 3
-8, 1, 'mlpr', 5, 'bowie', 4, 4, 5
-8, 1, 'mlpr', 5, 'bowie', 4, 1, 3
-8, 1, 'mlpr', 5, 'bowie', 4, 1, 2
-8, 1, 'mlpr', 8, 'pistols', 5, 1, 1
-8, 1, 'mlpr', 8, 'pistols', 5, 2, 3
-8, 1, 'mlpr', 8, 'pistols', 5, 4, 5
-8, 1, 'mlpr', 8, 'pistols', 5, 1, 3
-8, 1, 'mlpr', 8, 'pistols', 5, 1, 2
-8, 9, 'rl', 1, 'smith', 8, 1, 1
-8, 9, 'rl', 1, 'smith', 8, 2, 3
-8, 9, 'rl', 1, 'smith', 8, 4, 5
-8, 9, 'rl', 1, 'smith', 8, 1, 3
-8, 9, 'rl', 1, 'smith', 8, 1, 2
-8, 9, 'rl', 2, 'anka', 2, 1, 1
-8, 9, 'rl', 2, 'anka', 2, 2, 3
-8, 9, 'rl', 2, 'anka', 2, 4, 5
-8, 9, 'rl', 2, 'anka', 2, 1, 3
-8, 9, 'rl', 2, 'anka', 2, 1, 2
-8, 9, 'rl', 4, 'rhcp', 3, 1, 1
-8, 9, 'rl', 4, 'rhcp', 3, 2, 3
-8, 9, 'rl', 4, 'rhcp', 3, 4, 5
-8, 9, 'rl', 4, 'rhcp', 3, 1, 3
-8, 9, 'rl', 4, 'rhcp', 3, 1, 2
-8, 9, 'rl', 5, 'bowie', 4, 1, 1
-8, 9, 'rl', 5, 'bowie', 4, 2, 3
-8, 9, 'rl', 5, 'bowie', 4, 4, 5
-8, 9, 'rl', 5, 'bowie', 4, 1, 3
-8, 9, 'rl', 5, 'bowie', 4, 1, 2
-8, 9, 'rl', 8, 'pistols', 5, 1, 1
-8, 9, 'rl', 8, 'pistols', 5, 2, 3
-8, 9, 'rl', 8, 'pistols', 5, 4, 5
-8, 9, 'rl', 8, 'pistols', 5, 1, 3
-8, 9, 'rl', 8, 'pistols', 5, 1, 2
-8, 9, 'ppls', 1, 'smith', 8, 1, 1
-8, 9, 'ppls', 1, 'smith', 8, 2, 3
-8, 9, 'ppls', 1, 'smith', 8, 4, 5
-8, 9, 'ppls', 1, 'smith', 8, 1, 3
-8, 9, 'ppls', 1, 'smith', 8, 1, 2
-8, 9, 'ppls', 2, 'anka', 2, 1, 1
-8, 9, 'ppls', 2, 'anka', 2, 2, 3
-8, 9, 'ppls', 2, 'anka', 2, 4, 5
-8, 9, 'ppls', 2, 'anka', 2, 1, 3
-8, 9, 'ppls', 2, 'anka', 2, 1, 2
-8, 9, 'ppls', 4, 'rhcp', 3, 1, 1
-8, 9, 'ppls', 4, 'rhcp', 3, 2, 3
-8, 9, 'ppls', 4, 'rhcp', 3, 4, 5
-8, 9, 'ppls', 4, 'rhcp', 3, 1, 3
-8, 9, 'ppls', 4, 'rhcp', 3, 1, 2
-8, 9, 'ppls', 5, 'bowie', 4, 1, 1
-8, 9, 'ppls', 5, 'bowie', 4, 2, 3
-8, 9, 'ppls', 5, 'bowie', 4, 4, 5
-8, 9, 'ppls', 5, 'bowie', 4, 1, 3
-8, 9, 'ppls', 5, 'bowie', 4, 1, 2
-8, 9, 'ppls', 8, 'pistols', 5, 1, 1
-8, 9, 'ppls', 8, 'pistols', 5, 2, 3
-8, 9, 'ppls', 8, 'pistols', 5, 4, 5
-8, 9, 'ppls', 8, 'pistols', 5, 1, 3
-8, 9, 'ppls', 8, 'pistols', 5, 1, 2
+'adbs', 1
+'adbs', 2
+'adbs', 4
+'adbs', 8
+'adbs', 9
+'anlp', 1
+'anlp', 2
+'anlp', 4
+'anlp', 8
+'anlp', 9
+'ids', 1
+'ids', 2
+'ids', 4
+'ids', 8
+'ids', 9
+'sdp', 1
+'sdp', 2
+'sdp', 4
+'sdp', 8
+'sdp', 9
+'mlpr', 1
+'mlpr', 2
+'mlpr', 4
+'mlpr', 8
+'mlpr', 9
+'rl', 1
+'rl', 2
+'rl', 4
+'rl', 8
+'rl', 9
+'ppls', 1
+'ppls', 2
+'ppls', 4
+'ppls', 8
+'ppls', 9

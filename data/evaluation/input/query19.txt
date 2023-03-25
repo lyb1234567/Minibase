@@ -1,0 +1,1 @@
+Q(y,SUM(2*1*x*z)) :- S(x,y,z), 'mlp' != 'adbs'

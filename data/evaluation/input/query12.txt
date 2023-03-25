@@ -1,1 +1,1 @@
-Q(x, y, z, a, b, c, u, r) :- R(x, y, z), S(a, b, c), T(u, r), x > u
+Q(z,m) :- R(x,y,z), T(m,n)

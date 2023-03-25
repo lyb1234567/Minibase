@@ -115,7 +115,6 @@ public class JoinOperator extends Operator {
                 innerTuple=rightChildOperator.getNextTuple();
             }
         }
-
         outerTuple=leftChidOperator.getNextTuple();
         while ((outerTuple != null) ){
             rightChildOperator.reset();
@@ -132,7 +131,6 @@ public class JoinOperator extends Operator {
             }
             outerTuple=leftChidOperator.getNextTuple();
         }
-
         return null;
     }
 

@@ -57,6 +57,7 @@ public class QueryPlanner extends Operator{
 
     public void constructTree() throws IOException {
 
+        SumAggregate sumAggregate = inputQuery.getHead().getSumAggregate();
          // Set the scan operator list and predicate list
           List<ScanOperator> scanOperatorList = this.getScanOperatorList();
           List<ComparisonAtom> comparisonAtoms = this.getComparisonAtomList();
@@ -79,6 +80,13 @@ public class QueryPlanner extends Operator{
             RelationalAtom extractedrelationalAtom=null;
             extractedrelationalAtom= extractRelationalAtomOperator(operator);
             List<Variable> variableHead = extractVaribaleHead(inputQuery.getHead());
+            List<Variable> groupByVaribales = deepCopyVaribales(variableHead);
+            if (sumAggregate !=null)
+            {
+                SumOperator finalSumOperator = new SumOperator(operator,groupByVaribales,sumAggregate);
+                this.root = new ProjectionOperator(finalSumOperator,variableHead,extractedrelationalAtom);
+                return ;
+            }
             this.root = new ProjectionOperator(operator,variableHead,extractedrelationalAtom);
             return ;
         }
@@ -126,7 +134,6 @@ public class QueryPlanner extends Operator{
         }
         // Construct the final projectionOperator for setting root.
 
-        SumAggregate sumAggregate = inputQuery.getHead().getSumAggregate();
         if (sumAggregate==null)
         {
             ProjectionOperator finalProjectionOperator = new ProjectionOperator(curJoinOperator,extractVaribaleHead(this.inputQuery.getHead()),TempLeftRelational);
@@ -137,8 +144,6 @@ public class QueryPlanner extends Operator{
             List<Term> productTerms = sumAggregate.getProductTerms();
             List<Variable> projectVaribales = extractVaribaleHead(this.inputQuery.getHead());
             List<Variable> groupByVaribales = deepCopyVaribales(projectVaribales);
-//            List<Variable> newVariables = productTerms.stream().filter(t -> t instanceof Variable && !projectVaribales.contains(t)).map(t -> (Variable) t).collect(Collectors.toList());
-//            projectVaribales.addAll(newVariables);
             SumOperator finalSumOperator = new SumOperator(curJoinOperator,groupByVaribales,sumAggregate);
             ProjectionOperator finalProjectionOperator = new ProjectionOperator(finalSumOperator,projectVaribales,TempLeftRelational);
             this.root=finalProjectionOperator;
