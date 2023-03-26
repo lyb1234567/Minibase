@@ -37,7 +37,6 @@ public class Minibase {
     }
 
     public static void evaluateCQ(String databaseDir, String inputFile, String outputFile) throws IOException {
-
         Query inputQuery = QueryParser.parse(Paths.get(inputFile));
         String queryNumber = UltsForEvaluator.getqueryNumber(inputFile);
         QueryPlanner queryPlanner =new QueryPlanner(inputQuery,databaseDir);
