@@ -57,6 +57,7 @@ public class QueryPlanner extends Operator{
 
     public void constructTree() throws IOException {
 
+
         SumAggregate sumAggregate = inputQuery.getHead().getSumAggregate();
          // Set the scan operator list and predicate list
           List<ScanOperator> scanOperatorList = this.getScanOperatorList();

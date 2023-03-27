@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.PublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class QueryPlannerTest {
     {
         {
             add(variablex);
-            add(variabler);
+            add(variabley);
             add(variablez);
         }
     };
@@ -112,6 +113,28 @@ public class QueryPlannerTest {
     }
 
 
+    @Test
+    public void test()
+    {
+        final List<Variable> variables = new ArrayList<Variable>()
+        {
+            {
+                add(variablex);
+                add(variabley);
+                add(variablez);
+            }
+
+        };
+        final List<RelationalAtom> relationalAtoms = new ArrayList<RelationalAtom>()
+        {
+            {
+             add(relationalAtomR);
+             add(relationalAtomS);
+            }
+        };
+
+        System.out.println(ProjectionOperator.removeUnusedRelationalAtom(variables,relationalAtoms));
+    }
 
 //    @Test
 //    public void testQueryPlannerQuery1() throws IOException

@@ -28,7 +28,8 @@ public class ProjectionOperator extends Operator{
             return null;
         }
         Tuple potentialProjectionTuple = this.getResultFromProjection(childTuple);
-        while(this.tupleReported.contains(potentialProjectionTuple))
+        int hashcodePotentialProjectionTuple = potentialProjectionTuple.hashCode();
+        while(this.tupleReportedHashCode.contains(hashcodePotentialProjectionTuple))
         {
             Tuple nextChildTuple = childOperator.getNextTuple();
             if (nextChildTuple==null)
@@ -36,8 +37,9 @@ public class ProjectionOperator extends Operator{
                 return null;
             }
             potentialProjectionTuple  = this.getResultFromProjection(nextChildTuple);
+            hashcodePotentialProjectionTuple = potentialProjectionTuple.hashCode();
         }
-        this.tupleReported.add(potentialProjectionTuple);
+        this.tupleReportedHashCode.add(hashcodePotentialProjectionTuple);
         List<Constant> key = new ArrayList<>();
         if (this.childOperator instanceof SumOperator)
         {
@@ -64,7 +66,8 @@ public class ProjectionOperator extends Operator{
     private RelationalAtom relationalAtom;
 
     private List<RelationalAtom> relationalAtomList;
-    private Set<Tuple> tupleReported;
+
+    private Set<Integer> tupleReportedHashCode;
 
     private  List<RelationalAtom> reducedRelationAtomList;
 
@@ -74,8 +77,7 @@ public class ProjectionOperator extends Operator{
         this.childOperator=childOperator;
         this.projectionVariables=projectionVariables;
         this.relationalAtom=relationalAtom;
-        this.tupleReported= new HashSet<>();
-
+        this.tupleReportedHashCode = new HashSet<>();
     }
 
     /**
@@ -89,7 +91,6 @@ public class ProjectionOperator extends Operator{
         int numTers= getNumberFromRelationAtom();
         if (numTers !=fieldsSize)
         {
-            System.out.println(tuple.getFields());
             throw  new UnsupportedOperationException("The size of the fields of tuple doesn't match the total number of terms in the relation atoms");
         }
         List<Constant> constantList = new ArrayList<>();
@@ -113,8 +114,7 @@ public class ProjectionOperator extends Operator{
         this.childOperator = childOperator;
         this.projectionVariables = projectionVariables;
         this.relationalAtomList = relationalAtoms;
-
-        this.tupleReported = new HashSet<>();
+        this.tupleReportedHashCode = new HashSet<>();
     }
 
 
@@ -144,6 +144,44 @@ public class ProjectionOperator extends Operator{
                return UltsForEvaluator.getConstantFromSingleRelationalAtom(this.relationalAtom,inputTuple,variable);
          }
 
+    }
+
+    /**
+
+     This method takes in two parameters: a list of projection variables and a list of relational atoms. It returns a list of relational atoms with any unused relational atoms removed.
+     A relational atom is considered unused if it contains no constants and all of its variables are not in the projection variables list.
+     @param projectionVariables the list of variables to project onto
+     @param inputRelationalAtomList the list of relational atoms to remove unused atoms from
+     @return the updated list of relational atoms with unused atoms removed
+     */
+    public static List<RelationalAtom> removeUnusedRelationalAtom(List<Variable> projectionVariables,List<RelationalAtom> inputRelationalAtomList)
+    {
+        for(int i=0;i<inputRelationalAtomList.size();i++)
+        {
+            RelationalAtom relationalAtom = inputRelationalAtomList.get(i);
+            List<Term> termList = relationalAtom.getTerms();
+            int cnt=0;
+            for (Term term : termList)
+            {
+                if (term instanceof Constant)
+                {
+                    break;
+                }
+                else if(term instanceof  Variable)
+                {
+                    if(!projectionVariables.contains(term))
+                    {
+                        cnt++;
+                    }
+                }
+            }
+            if (cnt==termList.size())
+            {
+                inputRelationalAtomList.remove(i);
+                i=0;
+            }
+        }
+        return inputRelationalAtomList;
     }
 
     @Override
@@ -184,16 +222,9 @@ public class ProjectionOperator extends Operator{
         return childOperator;
     }
 
-    public void setChildOperator(Operator childOperator) {
-        this.childOperator = childOperator;
-    }
 
     public List<Variable> getProjectionVariables() {
         return projectionVariables;
-    }
-
-    public void setProjectionVariables(List<Variable> projectionVariables) {
-        this.projectionVariables = projectionVariables;
     }
 
     public RelationalAtom getRelationalAtom() {
@@ -208,16 +239,6 @@ public class ProjectionOperator extends Operator{
         return relationalAtomList;
     }
 
-    public void setRelationalAtomList(List<RelationalAtom> relationalAtomList) {
-        this.relationalAtomList = relationalAtomList;
-    }
 
-    public Set<Tuple> getTupleReported() {
-        return tupleReported;
-    }
-
-    public void setTupleReported(Set<Tuple> tupleReported) {
-        this.tupleReported = tupleReported;
-    }
 
 }
