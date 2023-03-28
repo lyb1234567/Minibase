@@ -91,6 +91,9 @@ public class ProjectionOperator extends Operator{
         int numTers= getNumberFromRelationAtom();
         if (numTers !=fieldsSize)
         {
+            System.out.println(numTers);
+            System.out.println(fieldsSize);
+            System.out.println(this.relationalAtom);
             throw  new UnsupportedOperationException("The size of the fields of tuple doesn't match the total number of terms in the relation atoms");
         }
         List<Constant> constantList = new ArrayList<>();

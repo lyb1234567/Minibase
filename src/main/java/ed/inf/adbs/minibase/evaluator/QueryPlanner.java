@@ -125,11 +125,18 @@ public class QueryPlanner extends Operator{
         while(combinedOperatorList.size()!=0)
         {
             Operator rightChild = combinedOperatorList.remove(0);
-
             rightRelationalAtom = extractRelationalAtomOperator(rightChild);
-
             curJoinOperator = new JoinOperator(curJoinOperator, rightChild, new ArrayList<>(TempLeftRelational), rightRelationalAtom, joinConditionMap.getOrDefault(rightRelationalAtom, new ArrayList<>()));
 
+            //If right operator is a selectionOperator, check if there is a constant in the relationalAtom. If so, remove the corresponding constant column to save the space
+            if (rightChild instanceof SelectionOperator)
+            {
+                List<Variable> variableList = ((SelectionOperator) rightChild).getRelationalAtom().getTerms().stream()
+                        .filter(term -> term instanceof Variable)
+                        .map(term -> (Variable) term)
+                        .collect(Collectors.toList());
+                rightChild= new ProjectionOperator(rightChild,variableList,rightRelationalAtom);
+            }
             // Deep copy the tempLeftRelational
             TempLeftRelational= deepCopyRelationalAtomList(TempLeftRelational);
             TempLeftRelational.add(rightRelationalAtom);
