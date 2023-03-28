@@ -16,7 +16,7 @@ public class ProjectionOperator extends Operator{
      * If the next tuple from the child operator is null, which means it reaches the end.
      * It will has a potential projecttion tuple, which will be check if it is already reported.
      * If the current potential tuple has been reported before, the project operator will try to get next tuple from its child operator, until there are no childTuples or it
-     * find another tuple that has not been reported before.
+     * find another tuple that has not been reported before.The hash set will store the hashcode of the potential projection tuple to save the sapce.
      * @return return the next tuple form project Operator.
      * @throws IOException
      */
@@ -81,7 +81,7 @@ public class ProjectionOperator extends Operator{
     }
 
     /**
-     * This method is used to project the tuple out of the projection variable. For each varibale, it should only one specific constant, and it will be added to a constant list
+     * This method is used to project the tuple out of the projection variable. For each variable, it should only one specific constant, and it will be added to a constant list
      * @param tuple input tuple
      * @return return a new tuple for this projection.
      */

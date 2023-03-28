@@ -285,6 +285,19 @@ public class MinibaseTest {
         boolean check=TestUlits.compareFileDifferentOrder(outputFile,expectedOutput);
         assertTrue(check);
     }
+    @Test
+    public void Testquery22() throws IOException {
+        String inputFile = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query22.txt";
+        String outputFile = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"input"+File.separator+"query22.csv";
+        String expectedOutput = "."+ File.separator+"data"+File.separator+"evaluation"+File.separator+"expected_output"+File.separator+"query22.csv";
+        Query inputQuery = QueryParser.parse(Paths.get(inputFile));
+        String queryNumber = UltsForEvaluator.getqueryNumber(inputFile);
+        QueryPlanner queryPlanner =new QueryPlanner(inputQuery,databaseDir);
+        TopInterpreter topInterpreter = new TopInterpreter(queryPlanner);
+        topInterpreter.dump(queryNumber,outputFile,".csv");
+        boolean check=TestUlits.compareFileDifferentOrder(outputFile,expectedOutput);
+        assertTrue(check);
+    }
 
 }
 

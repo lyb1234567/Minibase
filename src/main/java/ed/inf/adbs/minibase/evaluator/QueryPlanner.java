@@ -78,6 +78,7 @@ public class QueryPlanner extends Operator{
         if (combinedOperatorList.size()==1)
         {
             Operator operator = combinedOperatorList.get(0);
+            operator.reset();
             RelationalAtom extractedrelationalAtom=null;
             extractedrelationalAtom= extractRelationalAtomOperator(operator);
             List<Variable> variableHead = extractVaribaleHead(inputQuery.getHead());
@@ -188,6 +189,8 @@ public class QueryPlanner extends Operator{
     /**
      * This method is used to get the last relationalAtom, that can by applied by the corresponding join condition.
      * For exmaple in this case : In the case of R(x,y,z) S(x,w,t), T(m,r), [x>t,m>r], this method will return a map: {S(x,w,t)=x>t,T(m,r)=m>2}
+     * The reason why we use is that in our query planner, we join the operator from left to right. So, if there is a join condition we can always rely on the right operator to have map
+     * to the join condition.
      * @param joinConditions a list of join conditions
      * @param scanOperatorList a list of scanOperators
      * @return return a Map which can be used to get a corresponding list of comparison atoms
@@ -237,7 +240,14 @@ public class QueryPlanner extends Operator{
         }
         return lastWithEitherVariable.getRelationalAtom();
     }
-    // Extract relationalAtom from the corresponding operator
+
+    /**
+     Extracts a RelationalAtom from the given operator by casting the input Operator object
+     to its appropriate subtype (either SelectionOperator or ScanOperator).
+     @param operator The operator from which to extract the RelationalAtom. This must be
+     @return The extracted RelationalAtom from the given operator.
+     @throws IllegalArgumentException If the given operator is not an instance of SelectionOperator or ScanOperator.
+     */
     public static RelationalAtom extractRelationalAtomOperator(Operator operator)
     {
         RelationalAtom extractedrelationalAtom = null;
@@ -295,7 +305,7 @@ public class QueryPlanner extends Operator{
 
     /**
      * This method is used to filter out the joinConditions such as x>m in  R(x,y,z) S(x,w,t) T(m,r).
-     * Since we already have the method to check if there is a single atom comparison. We can just use to filter out the join conditions.
+     * Since we already have the method to check if there is a single atom comparison. We can just use to filter out the join conditions by finding the conditions that does not satisfy the single atom conditions
      * @param comparisonAtoms a list of comparison lists(a list of predicates)
      * @param scanOperators a list of scan operators
      * @return return joinConditions
@@ -485,7 +495,17 @@ public class QueryPlanner extends Operator{
     }
 
 
-    // get the number of variables in specific comparison.
+    /**
+
+     This method calculates the number of variables in a given comparison atom.
+     A comparison atom is a logical statement that consists of two terms and a relational operator
+     (e.g. "x < y", where "x" and "y" are terms and "<" is the relational operator).
+     @param comparisonAtom The comparison atom to evaluate. It should not be null.
+     @return The number of variables in the comparison atom. If the comparison atom has two terms that are both
+     constants, the method will return 0. If the comparison atom has one term that is a variable, the method,
+     will return 1. If both terms are variables, the method will return 2.
+     @throws NullPointerException if the comparisonAtom parameter is null.
+     */
     public static int getNumVariablesInComparisonAtom(ComparisonAtom comparisonAtom) {
         int Num = 0;
         Term term1 = comparisonAtom.getTerm1();

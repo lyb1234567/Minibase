@@ -103,6 +103,29 @@ public class SelectionOperator extends Operator {
      */
     public boolean checkAllPredicate(Tuple tuple, List<ComparisonAtom> comparisonAtomList, RelationalAtom sourceRelationAtom)
     {
+
+        // If there are no comparison atoms, we will need to check if there are some implicit selection predicates in the relational Atom, for example: R（x,9,z)
+        if(comparisonAtomList.size()==0)
+        {
+            boolean check=sourceRelationAtom.getTerms().stream().anyMatch(Constant.class::isInstance);
+            if (check)
+            {
+                List<Constant> tupleList =tuple.getFields();
+                List<Term> termList = sourceRelationAtom.getTerms();
+                for(Term term: termList)
+                {
+                    if (term instanceof Constant)
+                    {
+                        int index = termList.indexOf(term);
+                        if (!tupleList.get(index).equals(term))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
         for(int i=0;i<comparisonAtomList.size();i++)
         {
             ComparisonAtom curPredicate = comparisonAtomList.get(i);

@@ -40,4 +40,6 @@ java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Mi
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query18.txt data/evaluation/output/query18.csv
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query19.txt data/evaluation/output/query19.csv
 java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query20.txt data/evaluation/output/query20.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query21.txt data/evaluation/output/query21.csv
+java -cp target/minibase-1.0.0-jar-with-dependencies.jar ed.inf.adbs.minibase.Minibase data/evaluation/db data/evaluation/input/query22.txt data/evaluation/output/query22.csv
 python diffEvalulation.py
