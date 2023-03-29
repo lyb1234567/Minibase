@@ -93,7 +93,7 @@ public class QueryPlanner extends Operator{
             return ;
         }
 
-        //Get the join conditions
+        //Get the join conditions such as x>z
         List<ComparisonAtom> joinConditions = filterOutComparisonMultipleRelationalAtoms(comparisonAtoms,scanOperatorList);
 
 
@@ -195,7 +195,7 @@ public class QueryPlanner extends Operator{
 
     /**
      * This method is used to get the last relationalAtom, that can by applied by the corresponding join condition.
-     * For exmaple in this case : In the case of R(x,y,z) S(x,w,t), T(m,r), [x>t,m>r], this method will return a map: {S(x,w,t)=x>t,T(m,r)=m>2}
+     * For example in this case : In the case of R(x,y,z) S(x,w,t), T(m,r), [x>t,m>r], this method will return a map: {S(x,w,t)=x>t,T(m,r)=m>2}
      * The reason why we use is that in our query planner, we join the operator from left to right. So, if there is a join condition we can always rely on the right operator to have map
      * to the join condition.
      * @param joinConditions a list of join conditions
@@ -282,7 +282,7 @@ public class QueryPlanner extends Operator{
      * If the current ScanOperator is in the map, it means it has corresponding appliable predicate list, which can hence build a corresponding select operator.
      * This method will finally return a list of operators, where some of them can be select Operators.
      * @param scanOperatorList a list of leaf Operators: Scan Operators
-     * @param ScanOperatorSingleSelectionMap the map can be used to get corresponing predicate for a specific scanOperator
+     * @param ScanOperatorSingleSelectionMap the map can be used to get corresponding predicate for a specific scanOperator
      * @return return a list of Operators.
      */
     public static  List<Operator> CombinScanSelectionOperator (List<ScanOperator> scanOperatorList,  HashMap<ScanOperator,List<ComparisonAtom>> ScanOperatorSingleSelectionMap)

@@ -41,7 +41,7 @@ public class CQMinimizer {
      * @param head The head element will be used to display the distinguished variable list to compare
      * @return return a boolean to check
      */
-    public  static  boolean is_distinguished(String check_value, Head head)
+    public  static  boolean Isdistinguished(String check_value, Head head)
     {
         List<Variable> temp = head.getVariables();
         for(int i=0;i<temp.size();i++)
@@ -60,7 +60,7 @@ public class CQMinimizer {
      * @param body the parameter body will be print combined with head
      * @return this method will return a boolean,which can check if the current variable is distinguished.
      */
-    public static String Print_Body(Head head, List<Atom> body)
+    public static String printBody(Head head, List<Atom> body)
     {
 
         String result= head + " :- ";
@@ -85,15 +85,15 @@ public class CQMinimizer {
      * @param body_copy
      * @return It will return a new body list
      */
-    public static List<Atom> deepCopy_body(List<Atom>body_copy)
+    public static List<Atom> deepCopyBody(List<Atom>body_copy)
     {
-        List <Atom> new_lst=new ArrayList<>();
+        List <Atom> deepCopyAtomList=new ArrayList<>();
         for(Atom atom : body_copy)
         {
-            RelationalAtom add_atom=(RelationalAtom) atom.deepcopy();
-            new_lst.add(add_atom);
+            RelationalAtom addAtom=(RelationalAtom) atom.deepcopy();
+            deepCopyAtomList.add(addAtom);
         }
-        return new_lst;
+        return deepCopyAtomList;
     }
 
     /**
@@ -103,21 +103,21 @@ public class CQMinimizer {
      * @param head Head is used to check if a specific variable is distinguished
      * @return This method will return a minimized atom list
      */
-    public static List<Atom> minimization_helper(List<Atom> body,List<Atom>body_new, Head head)
+    public static List<Atom> minimizationHelper(List<Atom> body,List<Atom>body_new, Head head)
     {
         for (int  i=0;i<body.size();i++)
         {
             // We will check if the current atom has the single direction homomorphism with the other atoms in the subbody
-            RelationalAtom cur_atom =(RelationalAtom) body.get(i);
-            List<Atom> sub_body =Sub_body_lst(i,body);
-            boolean checkHomorphism=isHaveHomomorphism(sub_body,body,cur_atom,head);
+            RelationalAtom curAtom =(RelationalAtom) body.get(i);
+            List<Atom> subBody =subBodyList(i,body);
+            boolean checkHomorphism=isHaveHomomorphism(subBody,body,curAtom,head);
             if (!checkHomorphism)
             {
                 continue;
             }
             else
             {
-                body.remove(cur_atom);
+                body.remove(curAtom);
                 i=0;
             }
 
@@ -130,18 +130,18 @@ public class CQMinimizer {
      * This method is used to check if the modified body is a subset of the original body. To check if the input body is a subset
      * of original body, each relational atom of the original body will be compared with each relational atom of original body
      * @param body This body is modified when each homomorphism applies to the whole atom list, it will be modified and compared with the original body
-     * @param body_copy The body_copy parameter is an unmodified List<Atom>, where each relational atom will be compared with that of the modified body to check if it
+     * @param bodyCopy The body_copy parameter is an unmodified List<Atom>, where each relational atom will be compared with that of the modified body to check if it
      * is still a subset.
      * @param head head will be used to check if a specific variable is distinguished
      * @return return a boolean to check if it is a subset
      */
 
-    public static boolean Is_subset( List<Atom> body,List<Atom>body_copy,Head head)
+    public static boolean IsSubset( List<Atom> body,List<Atom>bodyCopy,Head head)
     {
         for(int i=0;i<body.size();i++)
         {
-            RelationalAtom body_atom =(RelationalAtom) body.get(i);
-            if (! Is_similar(body_atom,body_copy,head))
+            RelationalAtom bodyAtom =(RelationalAtom) body.get(i);
+            if (! IsSimilar(bodyAtom,bodyCopy,head))
             {
                 return false;
             }
@@ -149,12 +149,20 @@ public class CQMinimizer {
         return true;
     }
 
-    public static boolean checkSame(List<Atom> body,List<Atom>body_copy,Head head)
+    /**
+     * This method is used to check if a target body is contains exactly the same Atom as that of the compared body.
+     * This method is necessary when we want to check if the body are reversed when applying a specific homomorphism
+     * @param body target body to be compared
+     * @param bodyCopy original body
+     * @param head head from query
+     * @return will retun a boolean
+     */
+    public static boolean checkSame(List<Atom> body,List<Atom>bodyCopy,Head head)
     {
         int cnt =0 ;
-        for(int i=0;i<body_copy.size();i++)
+        for(int i=0;i<bodyCopy.size();i++)
         {
-            RelationalAtom curAtom =(RelationalAtom) body_copy.get(i);
+            RelationalAtom curAtom =(RelationalAtom) bodyCopy.get(i);
             if(! body.contains(curAtom))
             {
                 return false;
@@ -164,32 +172,69 @@ public class CQMinimizer {
     }
 
 
+    /**
 
-    public static RelationalAtom checkDifferent( List<Atom> body,List<Atom>body_copy,Head head)
+     This method takes in three arguments, a list of atoms representing the body of a rule, a copy of the body of the rule, and a head atom of the rule.
+     It iterates through each atom in the body list and checks if it is similar to the corresponding atom in the bodyCopy list and the head atom.
+     If an atom is not similar, it is returned as a RelationalAtom. If all atoms in the body list are similar, the method returns null.
+     @param body A list of atoms representing the body of a rule
+     @param bodyCopy A copy of the body of the rule
+     @param head A head atom of the rule
+     @return A RelationalAtom if an atom in the body is not similar to the corresponding atom in the bodyCopy and head atom, null otherwise.
+     */
+    public static RelationalAtom checkDifferent( List<Atom> body,List<Atom>bodyCopy,Head head)
     {
         for(int i=0;i<body.size();i++)
         {
-            RelationalAtom body_atom =(RelationalAtom) body.get(i);
-            if (! Is_similar(body_atom,body_copy,head))
+            RelationalAtom bodyAtom =(RelationalAtom) body.get(i);
+            if (! IsSimilar(bodyAtom,bodyCopy,head))
             {
-                return body_atom;
+                return bodyAtom;
             }
 
         }
-
         return null;
     }
+
+    /**
+
+     Checks if there exists a homomorphism between two lists of atoms and performs necessary updates.
+     The method starts by creating an empty list of homomorphisms. It then iterates through the target body
+     to find homomorphisms for each atom in the target body against the deleted atom. These homomorphisms
+     are stored in the homo_lst.
+     After collecting the homomorphisms, the method creates deep copies of the original body and target body,
+     which are referred to as tempBody and tempTarget, respectively. These copies are used to apply the
+     homomorphisms found earlier and check if they result in a valid homomorphism.
+     For each homomorphism in homo_lst, the method creates two lists: mapFromList and mapToList. These lists
+     store the terms that need to be replaced and the corresponding replacement terms, respectively. Then, it
+     iterates through tempBody and tempTarget, applying the term replacements (homomorphism) using the setAtom method.
+     After applying the homomorphism, the method checks if tempBody is a subset of the original body using the
+     IsSubset method. If tempBody is a subset and not the same as the original body, the method returns true,
+     indicating a valid homomorphism. If not, it proceeds to check for a sub-homomorphism.
+     The checkDifferent method is used to find the first atom that differs between tempBody and original body.
+     A new target body (newTargetBody) is created by taking a sublist of tempBody starting from the index of the
+     different atom. The method then checks for a sub-homomorphism between newTargetBody and tempBody using a
+     recursive call to isHaveHomomorphism. If a sub-homomorphism is found, the method returns true.
+     If no valid homomorphism or sub-homomorphism is found, the method resets tempBody to its initial state (deep
+     copy of the original body) and continues with the next homomorphism in homo_lst. If no valid homomorphism is
+     found after iterating through all the homomorphisms in homo_lst, the method returns false.
+     @param targetBody The list of target atoms to be checked against the original body.
+     @param originalBody The list of original atoms to be checked for homomorphism.
+     @param deletedAtom The relational atom to be deleted from the original body.
+     @param head The head of the rule being considered.
+     @return True if there is a valid homomorphism, false otherwise.
+     */
     public static boolean isHaveHomomorphism(List<Atom> targetBody, List<Atom> originalBody,RelationalAtom deletedAtom,Head head)
     {
-        List<HashMap<Term,Term>> homo_lst =new ArrayList<>();
-        for( Atom sub_atom : targetBody)
+        List<HashMap<Term,Term>> homoList =new ArrayList<>();
+        for( Atom subAtom : targetBody)
         {
             HashMap<Term,Term> homo = new HashMap<Term,Term>();
-            homo=check_homomorphism(deletedAtom,(RelationalAtom) sub_atom ,head);
+            homo=checkHomomorphism(deletedAtom,(RelationalAtom) subAtom ,head);
             if(homo!=null)
             {
                 if(!homo.isEmpty())
-                {homo_lst.add(homo);}
+                {homoList.add(homo);}
             }
         }
 //        System.out.println("Homo list:"+homo_lst);
@@ -199,67 +244,74 @@ public class CQMinimizer {
         // 1. check if the homomorphism list is empty, if so, just continue; 2. else, iterate through the list, apply every homomorphism and check if it works
         // Since we only care about one homomorphism, so if the current homomorphism works, just break
         // Deep copy the body for changing terms
-        List<Atom> temp_body=deepCopy_body(originalBody);
-        List<Atom> tempTarget=deepCopy_body(targetBody);
-        RelationalAtom tempDeleted=deletedAtom.deepcopy();
-        for(HashMap<Term,Term> map : homo_lst)
+        List<Atom> tempBody=deepCopyBody(originalBody);
+        List<Atom> tempTarget=deepCopyBody(targetBody);
+        for(HashMap<Term,Term> map : homoList)
         {
             // iterate through the current hashmap,
-            List<Term> map_from_lst =new ArrayList<>();
-            List<Term> map_to_lst =new ArrayList<>();
+            List<Term> mapFromList =new ArrayList<>();
+            List<Term> mapToList =new ArrayList<>();
             for (Map.Entry<Term,Term> homo: map.entrySet())
             {
-                map_from_lst.add(homo.getKey());
-                map_to_lst.add(homo.getValue());
+                mapFromList.add(homo.getKey());
+                mapToList.add(homo.getValue());
             }
             // System.out.println("Mapping from list:"+map_from);
             // System.out.println("Mapping to list:"+map_to);
             // Now we should have a list for storing maping from element and a list for maping to element
 
             // Now iterate through each map_form list and map_to list, User Set_value method to apply homomorphism
-            for(int i =0; i< temp_body.size();i++)
+            for(int i =0; i< tempBody.size();i++)
             {
-                RelationalAtom tempRelationalAtom = (RelationalAtom) temp_body.get(i);
-                setAtom(tempRelationalAtom,map_from_lst,map_to_lst);
+                RelationalAtom tempRelationalAtom = (RelationalAtom) tempBody.get(i);
+                setAtom(tempRelationalAtom,mapFromList,mapToList);
             }
             for(int i=0;i<tempTarget.size();i++)
             {
                 RelationalAtom tempRelationalAtom = (RelationalAtom) tempTarget.get(i);
-                setAtom(tempRelationalAtom,map_from_lst,map_to_lst);
+                setAtom(tempRelationalAtom,mapFromList,mapToList);
             }
 
             // Now check if the temp_body is a subset of the original body, which means we need make sure each relational atom is the same as that in
             // the original body
 //            System.out.println("After homo:"+temp_body);
-            boolean check_subset = Is_subset(temp_body,originalBody,head);
+            boolean check_subset = IsSubset(tempBody,originalBody,head);
 //            temp_body=Remove_repeat(temp_body);
             if (check_subset)
             {
-                if (checkSame(temp_body,originalBody,head))
+                if (checkSame(tempBody,originalBody,head))
                 {
                     return false;
                 }
-                originalBody=deepCopy_body(temp_body);
+                originalBody=deepCopyBody(tempBody);
                 return true;
             }
             else
             {
-                RelationalAtom differentdAtom = checkDifferent(temp_body,originalBody,head);
-                int index=temp_body.indexOf(differentdAtom);
-                List<Atom> newTargetBody = Sub_body_lst(index,temp_body);
-                boolean checkSubHomomorphism=isHaveHomomorphism(newTargetBody,temp_body,differentdAtom,head);
+                RelationalAtom differentdAtom = checkDifferent(tempBody,originalBody,head);
+                int index=tempBody.indexOf(differentdAtom);
+                List<Atom> newTargetBody = subBodyList(index,tempBody);
+                boolean checkSubHomomorphism=isHaveHomomorphism(newTargetBody,tempBody,differentdAtom,head);
                 if (checkSubHomomorphism)
                 {
                     return true;
                 }
                 else
                 {
-                    temp_body=deepCopy_body(originalBody);
+                    tempBody=deepCopyBody(originalBody);
                 }
             }
         }
         return false;
     }
+
+    /**
+     * This method is used to apply a specific homomorphism to a corresponding atom.
+     * @param targetAtom target relationalAtom to be applyed to a homomorphism such as {x-> 4}
+     * @param mapFromList a list of map from varibale
+     * @param mapToList a list of map to object
+     * @return return a applied Atom
+     */
     public static RelationalAtom setAtom (RelationalAtom targetAtom, List<Term> mapFromList,List<Term> mapToList)
     {
         for(int i=0;i< targetAtom.getTerms().size();i++)
@@ -285,44 +337,17 @@ public class CQMinimizer {
      * @param head
      * @return return a boolean to check if the relationsal atom is contained in the body.
      */
-    public  static  boolean Is_similar(RelationalAtom target_atom,List<Atom> body_copy,Head head)
+    public  static  boolean IsSimilar(RelationalAtom target_atom,List<Atom> body_copy,Head head)
     {
         for(int i=0;i<body_copy.size();i++)
         {
-            RelationalAtom body_relation_atom =(RelationalAtom) body_copy.get(i);
-            if (body_relation_atom.equals(target_atom))
+            RelationalAtom bodyRelationalAtom =(RelationalAtom) body_copy.get(i);
+            if (bodyRelationalAtom.equals(target_atom))
             {
                 return true;
             }
         }
         return false;
-    }
-
-
-    /**
-     * This method is used to check if a specific term is contained in a specific relational atom
-     * @param term This term might be modified due to an applied homomorphism, and it will be checked if contained in a target relational atom
-     * @param relationalAtom The relationatom will be iterated to check if one of the terms is the same as the target term
-     * @return It will return a list of strings, which contain two elements one for checking if it is contained, another for the index of the contained term
-     * for example, ["true",1] means that it is contained in the relational atom and the contained position is 1.
-     */
-    public static List<String> Is_contain_term(String term , RelationalAtom relationalAtom)
-    {
-        for(int i=0;i<relationalAtom.getTerms().size();i++)
-        {
-            if (relationalAtom.getTerms().get(i).toString().equals(term))
-            {
-                List<String> check=new ArrayList<>();
-                check.add("true");
-                check.add(Integer.toString(i));
-                return check;
-            }
-        }
-
-        List<String> check=new ArrayList<>();
-        check.add("false");
-        check.add(Integer.toString(Integer.MAX_VALUE));
-        return check;
     }
 
     /**
@@ -334,10 +359,10 @@ public class CQMinimizer {
      * @return it will return a hashmap, which contains the homomorphis for eaxampel {y=3} means y -> 3
      */
     // Method for checking if there is a homorphism between two relationalAtoms: only for one direction=> atom1 -> atom2
-    public static HashMap<Term,Term> check_homomorphism(RelationalAtom atom1,RelationalAtom atom2,Head head)
+    public static HashMap<Term,Term> checkHomomorphism(RelationalAtom atom1,RelationalAtom atom2,Head head)
     {
-        List<Term> term_lst_1=atom1.getTerms();
-        List<Term> term_lst_2=atom2.getTerms();
+        List<Term> termList1=atom1.getTerms();
+        List<Term> termList2=atom2.getTerms();
 
         // If they do not have the same name or the same size of term list, retun null;
         String name1=atom1.getName();
@@ -348,22 +373,22 @@ public class CQMinimizer {
         {
             return null;
         }
-        if(term_lst_1.size()!=term_lst_2.size())
+        if(termList1.size()!=termList2.size())
         {
             return null;
         }
         else
         {
             int cnt=0;
-            for(int i=0;i<term_lst_1.size();i++) {
-                Term term1 = term_lst_1.get(i);
-                Term term2 = term_lst_2.get(i);
+            for(int i=0;i<termList1.size();i++) {
+                Term term1 = termList1.get(i);
+                Term term2 = termList2.get(i);
                 boolean Isconstant_1 = term1 instanceof Constant;
                 boolean Isconstant_2 = term2 instanceof Constant;
                 boolean Isvariable_1 = term1 instanceof Variable;
                 boolean Isvariable_2 = term2 instanceof Variable;
-                boolean IsDistinguished_1 = is_distinguished(term1.toString(), head);
-                boolean IsDistinguished_2 = is_distinguished(term2.toString(), head);
+                boolean IsDistinguished_1 = Isdistinguished(term1.toString(), head);
+                boolean IsDistinguished_2 = Isdistinguished(term2.toString(), head);
 
 
                 //Rule 1: if the two terms are both variables that are not distinguished, we follow the single direction rule: from atom1 -> atom2
@@ -401,7 +426,7 @@ public class CQMinimizer {
                     }
                 }
             }
-            if (cnt==term_lst_1.size())
+            if (cnt==termList1.size())
             {
                 return result;
             }
@@ -414,11 +439,11 @@ public class CQMinimizer {
 
     /**
      * After minimization, the final body may contain duplicate relational atom, this method will be used to remove the duplicate relational atom. Hence it
-     * will out the fianal body, which will be used as the final result
+     * will out the final body, which will be used as the final result
      * @param target This is the target body, which will be used to remove the duplicate the relational atom
      * @return return the final body, which has been removed the duplicate relational atom
      */
-    public static List<Atom> Remove_repeat(List<Atom>target)
+    public static List<Atom> removeRepeat(List<Atom>target)
     {
         List<Atom> lst=new ArrayList<>();
         for(int i=0;i<target.size();i++)
@@ -454,15 +479,15 @@ public class CQMinimizer {
      * @return return the sub_body
      */
     // this method will be used to generate the subList of Atoms, which contains all the atoms apart from an atom of specific list
-    public static List<Atom> Sub_body_lst(int index,List<Atom>body)
+    public static List<Atom> subBodyList(int index,List<Atom>body)
     {
         List<Atom> temp =new ArrayList<>();
-        List<Atom> deepcopy = deepCopy_body(body);
-        for (int i=0;i<deepcopy.size();i++)
+        List<Atom> deepCopyBody = deepCopyBody(body);
+        for (int i=0;i<deepCopyBody.size();i++)
         {
             if (i!=index)
             {
-                temp.add(deepcopy.get(i));
+                temp.add(deepCopyBody.get(i));
             }
         }
         return temp;
@@ -489,9 +514,9 @@ public class CQMinimizer {
             List<Term> term1= R1.getTerms();
             List<Term> term2=R2.getTerms();
             // Use the Minimization helper to minimize the relational atoms from the body
-            body=minimization_helper(body,body_new,head);
-            body=Remove_repeat(body);
-            String output=Print_Body(head,body);
+            body=minimizationHelper(body,body_new,head);
+            body=removeRepeat(body);
+            String output=printBody(head,body);
             System.out.println(output);
             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile,false));
             writer.write(output);
