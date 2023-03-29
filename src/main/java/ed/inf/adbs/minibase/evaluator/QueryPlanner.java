@@ -32,23 +32,15 @@ public class QueryPlanner extends Operator{
     private List<RelationalAtom>relationalAtomList=new ArrayList<>();
     private List<ComparisonAtom> comparisonAtomList = new ArrayList<>();
 
-    private  String fileNameR;
-
-    private  String fileNameS;
-    private  String fileNameT;
 
     private  String schemaFilePath;
 
     public QueryPlanner(Query inputQuery,String dbDir) throws IOException {
         this.inputQuery = inputQuery;
-
         this.dbDir=dbDir;
         this.schemaFilePath = UltsForEvaluator.getschemaPath(dbDir);
         databaseCatalog.constructSchemaMap(this.schemaFilePath);
         this.SchemaMap = databaseCatalog.getSchemaMap();
-        this.fileNameR=UltsForEvaluator.csvFilePathGet(this.dbDir,"R");
-        this.fileNameS=UltsForEvaluator.csvFilePathGet(this.dbDir,"S");
-        this.fileNameT=UltsForEvaluator.csvFilePathGet(this.dbDir,"T");
         initializeRelationalAtomListComparisonList();
         setScanOpeartorList();
         constructTree();
@@ -564,21 +556,8 @@ public class QueryPlanner extends Operator{
             List<Term> termList = relationalAtom.getTerms();
             Schema schema=null;
             String filePath=null;
-            if (name.equals("R"))
-            {
-                schema = this.SchemaMap.get("R");
-                filePath=fileNameR;
-            }
-            else if(name.equals("S"))
-            {
-                schema = this.SchemaMap.get("S");
-                filePath=fileNameS;
-            }
-            else if(name.equals("T"))
-            {
-                schema = this.SchemaMap.get("T");
-                filePath=fileNameT;
-            }
+            filePath=UltsForEvaluator.csvFilePathGet(dbDir,name);
+            schema = this.SchemaMap.get(name);
             ScanOperator scanOperator = new ScanOperator(filePath,schema,relationalAtom);
             scanOperatorList.add(scanOperator);
         }
@@ -626,30 +605,6 @@ public class QueryPlanner extends Operator{
 
     public void setSchemaMap(HashMap<String, Schema> schemaMap) {
         SchemaMap = schemaMap;
-    }
-
-    public String getFileNameR() {
-        return fileNameR;
-    }
-
-    public void setFileNameR(String fileNameR) {
-        this.fileNameR = fileNameR;
-    }
-
-    public String getFileNameS() {
-        return fileNameS;
-    }
-
-    public void setFileNameS(String fileNameS) {
-        this.fileNameS = fileNameS;
-    }
-
-    public String getFileNameT() {
-        return fileNameT;
-    }
-
-    public void setFileNameT(String fileNameT) {
-        this.fileNameT = fileNameT;
     }
 
     public String getSchemaFilePath() {
