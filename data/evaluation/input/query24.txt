@@ -1,1 +1,1 @@
-Q(x,y,z,e,u,w) :- C (x,y,z,e,a,b,c,d), R(u,v,w), x > u
+Q(x,y,z,e,u,v,w) :- C (x,y,z,e,a,b,c,d), R(u,v,w), x > u, y < v

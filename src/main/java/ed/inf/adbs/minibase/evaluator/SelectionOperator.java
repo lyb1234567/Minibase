@@ -194,7 +194,6 @@ public class SelectionOperator extends Operator {
         if (lenRelationAtom != lenTupleSize) {
             throw new IllegalArgumentException("The length of tuple should match the length of the corresponding relational Atom");
         }
-        int index=0;
         boolean checkRelation=true;
         // Check if the relation atom contains any constant class
         if (sourceRelationAtom.getTerms().stream().anyMatch(Constant.class::isInstance))
@@ -202,6 +201,7 @@ public class SelectionOperator extends Operator {
             List<Term> termList = sourceRelationAtom.getTerms();
             for( Term relationAtom : termList)
             {
+                int index = termList.indexOf(relationAtom);
                 // if some atoms in the term list are Integer constants, change it to Integer constants
                 if(relationAtom.getClass()==IntegerConstant.class)
                 {
@@ -209,6 +209,10 @@ public class SelectionOperator extends Operator {
                     if(tuple.getFields().get(index).getClass() ==IntegerConstant.class)
                     {
                         checkRelation= compareConstants(tuple.getFields().get(index),rightIntegerConstant,ComparisonOperator.EQ);
+                        if(!checkRelation)
+                        {
+                            break;
+                        }
                     }
                     else
                     {
@@ -223,6 +227,10 @@ public class SelectionOperator extends Operator {
                     if(tuple.getFields().get(index).getClass() ==StringConstant.class)
                     {
                         checkRelation= compareConstants(tuple.getFields().get(index),rightStringConstant,ComparisonOperator.EQ);
+                        if (!checkRelation)
+                        {
+                            break;
+                        }
                     }
                     else
                     {
@@ -235,6 +243,7 @@ public class SelectionOperator extends Operator {
         // if the ComparisonAtom contains relational atoms, then compare
         if (IsContainedComparisonAtomRelationalAtom(sourceRelationAtom, comparisonAtom)) {
             ComparisonAtom comparisonSubstitution = tupleSubstitutionComparisonAtom(comparisonAtom, sourceRelationAtom, tuple);
+
             Term comparisonSubstitutionTerm1 = comparisonSubstitution.getTerm1();
             Term comparisonSubstitutionTerm2 = comparisonSubstitution.getTerm2();
             if ((comparisonSubstitutionTerm1 instanceof Variable) || (comparisonSubstitutionTerm2 instanceof Variable)) {
@@ -245,7 +254,6 @@ public class SelectionOperator extends Operator {
             {
                 return compareConstants((Constant) comparisonSubstitutionTerm1,(Constant) comparisonSubstitutionTerm2,comparisonAtom.getOp()) && checkRelation;
             }
-
         }
         return false;
     }

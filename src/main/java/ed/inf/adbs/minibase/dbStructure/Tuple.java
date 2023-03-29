@@ -82,9 +82,10 @@ public class Tuple {
         return new Tuple(new_fields);
     }
 
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Tuple{" +
+                "fields=" + fields +
+                '}';
+    }
 }

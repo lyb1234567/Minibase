@@ -82,7 +82,7 @@ public class JoinOperator extends Operator {
         this.rightChildOperator = rightChildOperator;
         this.leftChildRelationAtoms = leftChildRelationAtoms;
         this.rightChildRelationAtom = rightChildRelationAtom;
-        Predicates = predicates;
+        this.Predicates = predicates;
         this.outerTuple = null;
         this.innerTuple = null;
     }
@@ -177,7 +177,6 @@ public class JoinOperator extends Operator {
                 break;
             }
         }
-
         boolean checkPass = passesPredicatList(leftTuple,rightTuple,joinConditions,leftChildAtoms,rightChildAtom);
         return !sameNameVariableNotEqual&& checkPass;
     }

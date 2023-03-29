@@ -124,7 +124,7 @@ public class UltsForEvaluator {
         }
         if(compareResult==0)
         {
-            return operator.equals(ComparisonOperator.EQ);
+            return operator.equals(ComparisonOperator.EQ) || (operator.equals(ComparisonOperator.GEQ)) || operator.equals(ComparisonOperator.LEQ);
         }
         else
         {

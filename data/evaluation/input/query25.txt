@@ -1,1 +1,1 @@
-Q(x,y,z,e,u,v,w) :- C (x,y,z,e,a,b,c,d), R(u,v,w), x > u, y < v
+Q(x,y,z,e,u,v,w,g,k,l,m,n) :- C(x,y,z,e,2,b,4,d), R(u,v,w), S(f,g,y), T(j,k), B(o,m,n,p), T(l,k), T(j,k), u <= x, x <= u, x != z, y < v, d!=1, b!=2, e!=3, f!=1, f!=u, k!=j, u < o, o < v, m < n, n < p, o!=3, p >= 'dsa', n < 'z', 'aadsoj' < n

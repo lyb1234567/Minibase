@@ -28,8 +28,9 @@ public class ProjectionOperator extends Operator{
             return null;
         }
         Tuple potentialProjectionTuple = this.getResultFromProjection(childTuple);
-        int hashcodePotentialProjectionTuple = potentialProjectionTuple.hashCode();
-        while(this.tupleReportedHashCode.contains(hashcodePotentialProjectionTuple))
+        String hashcodePotentialProjectionTuple = potentialProjectionTuple.toString();
+
+        while(this.tupleReportedHashCodeString.contains(hashcodePotentialProjectionTuple))
         {
             Tuple nextChildTuple = childOperator.getNextTuple();
             if (nextChildTuple==null)
@@ -37,9 +38,9 @@ public class ProjectionOperator extends Operator{
                 return null;
             }
             potentialProjectionTuple  = this.getResultFromProjection(nextChildTuple);
-            hashcodePotentialProjectionTuple = potentialProjectionTuple.hashCode();
+            hashcodePotentialProjectionTuple = potentialProjectionTuple.toString();
         }
-        this.tupleReportedHashCode.add(hashcodePotentialProjectionTuple);
+        this.tupleReportedHashCodeString.add(hashcodePotentialProjectionTuple);
         List<Constant> key = new ArrayList<>();
         if (this.childOperator instanceof SumOperator)
         {
@@ -67,7 +68,7 @@ public class ProjectionOperator extends Operator{
 
     private List<RelationalAtom> relationalAtomList;
 
-    private Set<Integer> tupleReportedHashCode;
+    private Set<String> tupleReportedHashCodeString;
 
     private  List<RelationalAtom> reducedRelationAtomList;
 
@@ -77,7 +78,7 @@ public class ProjectionOperator extends Operator{
         this.childOperator=childOperator;
         this.projectionVariables=projectionVariables;
         this.relationalAtom=relationalAtom;
-        this.tupleReportedHashCode = new HashSet<>();
+        this.tupleReportedHashCodeString = new HashSet<>();
     }
 
     /**
@@ -117,7 +118,7 @@ public class ProjectionOperator extends Operator{
         this.childOperator = childOperator;
         this.projectionVariables = projectionVariables;
         this.relationalAtomList = relationalAtoms;
-        this.tupleReportedHashCode = new HashSet<>();
+        this.tupleReportedHashCodeString = new HashSet<>();
     }
 
 

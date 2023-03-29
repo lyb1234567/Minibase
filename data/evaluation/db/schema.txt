@@ -4,7 +4,7 @@ T int int
 A string string string int
 B int string string string
 C int int int int int int int int
-Student int string int string int
+STUDENT int string int string int
 Professor int string string string
 ID int
 Building int string

@@ -65,6 +65,7 @@ public class QueryPlanner extends Operator{
         // Set combined selection and scan operator list
         List<Operator> combinedOperatorList = CombinScanSelectionOperator(scanOperatorList,scanOperatorSingleSelectionMap);
 
+        System.out.println(combinedOperatorList);
         // If it is just a single atom query, we can just go directly to projection process. First need to extract relational Atom from the corresponding atom, then construct
         // the projection operator and add it as the root
         if (combinedOperatorList.size()==1)
@@ -92,10 +93,12 @@ public class QueryPlanner extends Operator{
         // Use first two operators from the operator list to join
         Operator first = combinedOperatorList.remove(0);
         Operator second = combinedOperatorList.remove(0);
-
+        first.reset();
+        second.reset();
 
         // get the joinConditionMap, which can be used to get the last relationAtom that can be applied by the comparisonAtom list
         HashMap<RelationalAtom,List<ComparisonAtom>> joinConditionMap = constructJoinConditionMap(joinConditions,scanOperatorList);
+
 
         // construct the leftRelationAtoms for join Operator
 
@@ -110,6 +113,7 @@ public class QueryPlanner extends Operator{
         // Initialize the first JoinOperator
         List<ComparisonAtom> DefaultPredicate = joinConditionMap.getOrDefault(rightRelationalAtom,new ArrayList<>());
         JoinOperator curJoinOperator = new JoinOperator(first,second,leftRelationAtoms,rightRelationalAtom,DefaultPredicate);
+        curJoinOperator.reset();
 
         // after combining them together, then add the right relationalAtom to the left
         List<RelationalAtom> TempLeftRelational = deepCopyRelationalAtomList(leftRelationAtoms);
@@ -120,15 +124,16 @@ public class QueryPlanner extends Operator{
             rightRelationalAtom = extractRelationalAtomOperator(rightChild);
             curJoinOperator = new JoinOperator(curJoinOperator, rightChild, new ArrayList<>(TempLeftRelational), rightRelationalAtom, joinConditionMap.getOrDefault(rightRelationalAtom, new ArrayList<>()));
 
+
             //If right operator is a selectionOperator, check if there is a constant in the relationalAtom. If so, remove the corresponding constant column to save the space
-            if (rightChild instanceof SelectionOperator)
-            {
-                List<Variable> variableList = ((SelectionOperator) rightChild).getRelationalAtom().getTerms().stream()
-                        .filter(term -> term instanceof Variable)
-                        .map(term -> (Variable) term)
-                        .collect(Collectors.toList());
-                rightChild= new ProjectionOperator(rightChild,variableList,rightRelationalAtom);
-            }
+//            if (rightChild instanceof SelectionOperator)
+//            {
+//                List<Variable> variableList = ((SelectionOperator) rightChild).getRelationalAtom().getTerms().stream()
+//                        .filter(term -> term instanceof Variable)
+//                        .map(term -> (Variable) term)
+//                        .collect(Collectors.toList());
+//                rightChild= new ProjectionOperator(rightChild,variableList,rightRelationalAtom);
+//            }
             // Deep copy the tempLeftRelational
             TempLeftRelational= deepCopyRelationalAtomList(TempLeftRelational);
             TempLeftRelational.add(rightRelationalAtom);
@@ -287,6 +292,7 @@ public class QueryPlanner extends Operator{
             if (checkContainKey)
             {
                 List<ComparisonAtom> relevantComparisonList= ScanOperatorSingleSelectionMap.get(scanOperator);
+                relevantComparisonList.removeIf(comparisonAtom -> !checkSingleComparison(comparisonAtom,scanOperator));
                 if (relevantComparisonList.size()>0)
                 {
                     currentOperator= new SelectionOperator(scanOperator.getRelationalAtom(),scanOperator,relevantComparisonList);
@@ -301,6 +307,38 @@ public class QueryPlanner extends Operator{
         return operatorList;
     }
 
+
+    public static boolean checkSingleComparison(ComparisonAtom comparisonAtom, ScanOperator scanOperator)
+    {
+
+        Term term1=comparisonAtom.getTerm1();
+
+        Term term2=comparisonAtom.getTerm2();
+
+        RelationalAtom relationalAtom = scanOperator.getRelationalAtom();
+
+        int numVariabe=getNumVariablesInComparisonAtom(comparisonAtom);
+        if (numVariabe==1)
+        {
+            if (term1 instanceof Variable)
+            {
+                return relationalAtom.getTerms().contains(term1);
+            }
+            if (term2 instanceof  Variable)
+            {
+                return relationalAtom.getTerms().contains(term2);
+            }
+        }
+        if (numVariabe==0)
+        {
+            return false;
+        }
+        if (numVariabe==2)
+        {
+            return  relationalAtom.getTerms().contains(term1) && relationalAtom.getTerms().contains(term2);
+        }
+        return false;
+    }
 
     /**
      * This method is used to filter out the joinConditions such as x>m in  R(x,y,z) S(x,w,t) T(m,r).
@@ -343,6 +381,8 @@ public class QueryPlanner extends Operator{
                 {
                     comparisonAtoms.add(comparisonAtom);
                 }
+
+
             }
             resultMap.put(scanOperator,comparisonAtoms);
         }
@@ -556,7 +596,7 @@ public class QueryPlanner extends Operator{
             List<Term> termList = relationalAtom.getTerms();
             Schema schema=null;
             String filePath=null;
-            filePath=UltsForEvaluator.csvFilePathGet(dbDir,name);
+            filePath=dbDir+File.separator+"files"+File.separator+name+".csv";
             schema = this.SchemaMap.get(name);
             ScanOperator scanOperator = new ScanOperator(filePath,schema,relationalAtom);
             scanOperatorList.add(scanOperator);
