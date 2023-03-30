@@ -15,6 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+This class represents the query planner for parsing the target query, it provides methods for extract the join condition for each join operator.
+It also provides a method of constructing the query tree, which in this case following the principle of selecting and scaning first and join,which also optimize total
+query planner.
+It has a root operator for drawing the whole tree and take the dBDir path to construct the schema and construct the list of scan Operators
+ */
 public class QueryPlanner extends Operator{
 
 
@@ -65,7 +71,6 @@ public class QueryPlanner extends Operator{
         // Set combined selection and scan operator list
         List<Operator> combinedOperatorList = CombinScanSelectionOperator(scanOperatorList,scanOperatorSingleSelectionMap);
 
-        System.out.println(combinedOperatorList);
         // If it is just a single atom query, we can just go directly to projection process. First need to extract relational Atom from the corresponding atom, then construct
         // the projection operator and add it as the root
         if (combinedOperatorList.size()==1)
@@ -123,17 +128,6 @@ public class QueryPlanner extends Operator{
             Operator rightChild = combinedOperatorList.remove(0);
             rightRelationalAtom = extractRelationalAtomOperator(rightChild);
             curJoinOperator = new JoinOperator(curJoinOperator, rightChild, new ArrayList<>(TempLeftRelational), rightRelationalAtom, joinConditionMap.getOrDefault(rightRelationalAtom, new ArrayList<>()));
-
-
-            //If right operator is a selectionOperator, check if there is a constant in the relationalAtom. If so, remove the corresponding constant column to save the space
-//            if (rightChild instanceof SelectionOperator)
-//            {
-//                List<Variable> variableList = ((SelectionOperator) rightChild).getRelationalAtom().getTerms().stream()
-//                        .filter(term -> term instanceof Variable)
-//                        .map(term -> (Variable) term)
-//                        .collect(Collectors.toList());
-//                rightChild= new ProjectionOperator(rightChild,variableList,rightRelationalAtom);
-//            }
             // Deep copy the tempLeftRelational
             TempLeftRelational= deepCopyRelationalAtomList(TempLeftRelational);
             TempLeftRelational.add(rightRelationalAtom);
