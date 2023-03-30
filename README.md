@@ -11,10 +11,9 @@ So, when we iterating through a list of comparison atoms, for those comparison a
 
 **Projection**
 
-In Projection operator,  to remove the duplicate from the projected tuples,  we usually use a tuple to store the reported tuple. However, it will take up a lot of space. To optimize it, I will first hash the corresponding tuple and get its hash code, then instead of storing the tuple itself, the hashset will store the generated hash value, which is just an integer and hence can save a lot of space. 
+In Projection operator,  to remove the duplicate from the projected tuples,  we usually use a tuple to store the reported tuple. However, it will take up a lot of space. To optimize it, I rewrite the **toString()** method of Tuple, then instead of storing the tuple itself, the hash set will store string version of each tuple which is just an integer and hence can save a lot of space. 
 
 
 
-**Selection**
-
-In queryplanner, when the planner try to join the selection operator, we will check if there is a implicit constant in the selection operator, such as T(x,1), if so we will remove the constant column by using projection operator. For example,if the getNextTuple() method get a Tuple [3,1] in this case, the planner will project out the 3 for the following join operator and hence save the space, where a space for one column of tuple is saved.
+**Query Planner**
+In the class of query planner, it follows the principle of constructing selection Operator first and then perform the Join Operation, which can hence reduce the number of tuples before projection operation
